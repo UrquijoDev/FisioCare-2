@@ -1,0 +1,52 @@
+﻿@page
+@model FisioCare_2.Pages.Admin.IndexModel
+@{
+    Layout = "_LayoutAdmin";
+}
+<section class="dashboard-grid">
+    <section class="projects-section card">
+        <div class="card-header">
+            <h2>Últimos usuarios Registrados</h2>
+            <p class="subtitle">Resumen de los más recientes</p>
+        </div>
+        <div class="projects-list-container">
+            <div class="projects-list">
+                <div class="project-header-row">
+                    <span>Título</span>
+                    <span>Descripción</span>
+                </div>
+               @*  @foreach (var project in Model.ProjectPreview)
+                {
+                    <div class="project-row">
+                        <div class="project-company" data-label="Título">
+                            <strong>@project.Title</strong>
+                        </div>
+                        <div class="project-budget" data-label="Descripción">
+                            @project.Description
+                        </div>
+                    </div>
+                } *@
+            </div>
+        </div>
+    </section>
+
+    <aside class="sidebar-cards-section">
+        <section class="reviews-card card">
+            <div class="card-header">
+                <h2>Paquetes de Creditos Recientes</h2>
+            </div>
+            <ul class="orders-list">
+              @*   @foreach (var service in Model.ServicePreview)
+                {
+                    <li class="order-item">
+                        <span class="order-icon green">📦</span>
+                        <div class="order-details">
+                            <span class="order-title">@service.Name</span>
+                            <span class="order-time">@service.Price</span>
+                        </div>
+                    </li>
+                } *@
+            </ul>
+        </section>
+    </aside>
+</section>

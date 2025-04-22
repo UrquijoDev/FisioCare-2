@@ -10,6 +10,7 @@ namespace FisioCare_2.Services
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
+        public DbSet<Horario> Horarios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -46,5 +47,8 @@ namespace FisioCare_2.Services
             builder.Entity<IdentityRole>().HasData(admin, paciente, fisioterapeuta, recepcionista);
 
         }
+    
+    
+    
     }
 }

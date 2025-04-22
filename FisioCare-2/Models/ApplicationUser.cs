@@ -8,5 +8,7 @@ namespace FisioCare_2.Models
         public string LastName { get; set; } = string.Empty;
         public string ImageFileName { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
+        public ICollection<Horario> Horarios { get; set; } = new List<Horario>();
+
     }
 }

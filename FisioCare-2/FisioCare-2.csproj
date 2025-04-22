@@ -23,10 +23,10 @@
     <Folder Include="Pages\Admin\GestionCreditos\" />
     <Folder Include="Pages\Admin\PaquetesCreditos\" />
     <Folder Include="Pages\Admin\ServiciosFisio\" />
-    <Folder Include="Pages\Admin\UsuariosT\" />
     <Folder Include="Pages\Fisioterapeuta\" />
     <Folder Include="Pages\Recepcionista\" />
     <Folder Include="Pages\Paciente\" />
+    <Folder Include="wwwroot\img\users\" />
   </ItemGroup>
 
 </Project>

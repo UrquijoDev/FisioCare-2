@@ -1,0 +1,75 @@
+﻿@page
+@model FisioCare_2.Pages.Admin.UsuariosT.IndexModel
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<div class="row mb-5">
+    <div class="col">
+        <a class="btn btn-primary" asp-page='/Admin/UsuariosT/Create'>Nuevo Usuario</a>
+    </div>
+</div>
+
+<section class="projects-section card">
+    <div class="card-header">
+        <h2>Usuarios</h2>
+        <p class="subtitle">Listado de usuarios registrados y sus roles asignados</p>
+    </div>
+    <div class="projects-list-container">
+        <div class="projects-list">
+            <div class="project-header-row">
+                <span>Nombre</span>
+                <span>Apellido</span>
+                <span>Imagen</span>
+                <span>Rol</span>
+                <span>Horario</span>
+                <span>Acciones</span>
+            </div>
+
+            @foreach (var user in Model.Usuarios)
+            {
+                var roles = await Model.UserManager.GetRolesAsync(user); // Roles por usuario
+                <div class="project-row">
+                    <div class="project-company" data-label="Nombre">
+                        @user.FirstName
+                    </div>
+                    <div class="project-budget" data-label="Apellido">
+                        @user.LastName
+                    </div>
+                    <div class="project-members" data-label="Imagen">
+                        @if (!string.IsNullOrEmpty(user.ImageFileName))
+                        {
+                            <img src="~/img/users/@user.ImageFileName" alt="Imagen del usuario" width="80" class="img-thumbnail" />
+                        }
+                        else
+                        {
+                            <span>Sin imagen</span>
+                        }
+                    </div>
+                    <div class="project-members" data-label="Rol">
+                        @if (roles.Any())
+                        {
+                            <ul>
+                                @foreach (var rol in roles)
+                                {
+                                @rol
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span>Sin rol</span>
+                        }
+                    </div>
+                    <div>
+
+                    </div>
+                    <div class="project-completion" data-label="Acciones">
+                        <a class="btn btn-sm btn-primary" asp-page="./Editar" asp-route-id="@user.Id">Editar</a>
+                        <a class="btn btn-sm btn-danger" asp-page="./Eliminar" asp-route-id="@user.Id">Eliminar</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
