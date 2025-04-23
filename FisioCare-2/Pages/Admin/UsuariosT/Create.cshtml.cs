@@ -1,70 +1,99 @@
+using FisioCare_2.Models;
+using FisioCare_2.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using FisioCare_2.Services; // Ajusta si tu ApplicationUser está en otra carpeta
-using FisioCare_2.Models; // Tu modelo extendido de IdentityUser
-using System.IO;
 
 namespace FisioCare_2.Pages.Admin.UsuariosT
 {
     public class CreateModel : PageModel
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IWebHostEnvironment _env;
 
-        public CreateModel(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IWebHostEnvironment env)
+        public CreateModel(UserManager<ApplicationUser> userManager,
+                           RoleManager<IdentityRole> roleManager,
+                           ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
-            _env = env;
+            _context = context;
         }
 
         [BindProperty]
-        public ApplicationUser Usuario { get; set; } = new ApplicationUser();
+        public ApplicationUser Usuario { get; set; }
 
         [BindProperty]
-        [DataType(DataType.Password)]
-        public string Password { get; set; } = string.Empty;
+        [Required]
+        public string Password { get; set; }
 
         [BindProperty]
-        public string SelectedRole { get; set; } = string.Empty;
+        public IFormFile ImageFile { get; set; }
 
         [BindProperty]
-        public IFormFile? ImageFile { get; set; }
+        [Required]
+        public string SelectedRole { get; set; }
 
-        public SelectList Roles { get; set; } = default!;
+        [BindProperty]
+        public List<Horario> Horarios { get; set; } = new();
 
-        public string errorMessage = "";
-        public string successMessage = "";
+        public List<SelectListItem> Roles { get; set; }
 
-        public void OnGet()
+        public string? errorMessage;
+        public string? successMessage;
+
+        public async Task<IActionResult> OnGetAsync()
         {
-            Roles = new SelectList(_roleManager.Roles.Select(r => r.Name).ToList());
+            Roles = _roleManager.Roles
+                .Select(r => new SelectListItem { Value = r.Name, Text = r.Name })
+                .ToList();
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            Roles = new SelectList(_roleManager.Roles.Select(r => r.Name).ToList());
+            Roles = _roleManager.Roles
+                .Where(r => r.Name != "Paciente") // Excluye pacientes
+                .Select(r => new SelectListItem { Value = r.Name, Text = r.Name })
+                .ToList();
+
+            if (SelectedRole == "Admin")
+            {
+                // Limpia los errores de validación que puedan haberse generado para los horarios
+                for (int i = 0; i < Horarios.Count; i++)
+                {
+                    ModelState.Remove($"Horarios[{i}].HoraInicio");
+                    ModelState.Remove($"Horarios[{i}].HoraFin");
+                }
+            }
 
             if (!ModelState.IsValid)
             {
-                errorMessage = "Por favor revisa los campos del formulario.";
+                foreach (var entry in ModelState)
+                {
+                    foreach (var error in entry.Value.Errors)
+                    {
+                        Console.WriteLine($"Error en {entry.Key}: {error.ErrorMessage}");
+                    }
+                }
+
+                errorMessage = "Datos inválidos. Revisa los logs para más detalles.";
                 return Page();
             }
 
-            // Procesar imagen
+
             if (ImageFile != null && ImageFile.Length > 0)
             {
                 string fileName = $"{Guid.NewGuid()}{Path.GetExtension(ImageFile.FileName)}";
-                string folderPath = Path.Combine(_env.WebRootPath, "img", "users");
+                string path = Path.Combine("wwwroot", "img", "users");
+                Directory.CreateDirectory(path);
+                string fullPath = Path.Combine(path, fileName);
 
-                Directory.CreateDirectory(folderPath); // Asegura que exista
-                string filePath = Path.Combine(folderPath, fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
                     await ImageFile.CopyToAsync(stream);
                 }
@@ -72,27 +101,35 @@ namespace FisioCare_2.Pages.Admin.UsuariosT
                 Usuario.ImageFileName = fileName;
             }
 
-            Usuario.UserName = Usuario.Email; // ? ESTA ES LA OPCIÓN 1
+            Usuario.UserName = Usuario.Email;
             var result = await _userManager.CreateAsync(Usuario, Password);
+
             if (!result.Succeeded)
             {
-                errorMessage = string.Join("; ", result.Errors.Select(e => e.Description));
+                errorMessage = string.Join(" | ", result.Errors.Select(e => e.Description));
                 return Page();
             }
 
-            if (!string.IsNullOrEmpty(SelectedRole))
-            {
-                var roleResult = await _userManager.AddToRoleAsync(Usuario, SelectedRole);
-                if (!roleResult.Succeeded)
-                {
-                    errorMessage = "Usuario creado, pero no se pudo asignar el rol.";
-                    return Page();
-                }
-            }
+            await _userManager.AddToRoleAsync(Usuario, SelectedRole);
 
+            // Ahora que el usuario ya está creado y tiene su ID, podemos crear sus horarios
+            if (SelectedRole != "Admin" && Horarios != null)
+            {
+                foreach (var horario in Horarios)
+                {
+                    if (horario.HoraInicio != default && horario.HoraFin != default)
+                    {
+                        horario.UsuarioId = Usuario.Id;
+                        _context.Horarios.Add(horario);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+            }
 
             successMessage = "Usuario creado exitosamente.";
             return RedirectToPage("/Admin/UsuariosT/Index");
         }
+
     }
 }

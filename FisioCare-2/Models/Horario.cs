@@ -11,7 +11,7 @@
         public TimeSpan HoraFin { get; set; }
 
         // Relación con Usuario
-        public string UsuarioId { get; set; }
-        public ApplicationUser Usuario { get; set; } = null!;
+        public string? UsuarioId { get; set; } = String.Empty; // Deja este campo nullable, porque puede no tener un usuario al inicio
+        public ApplicationUser? Usuario { get; set; }  // Esta propiedad debe ser nullable
     }
 }

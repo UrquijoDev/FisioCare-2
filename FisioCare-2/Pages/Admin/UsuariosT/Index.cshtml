@@ -29,6 +29,8 @@
             @foreach (var user in Model.Usuarios)
             {
                 var roles = await Model.UserManager.GetRolesAsync(user); // Roles por usuario
+                var horarios = user.Horarios; // Horarios del usuario
+
                 <div class="project-row">
                     <div class="project-company" data-label="Nombre">
                         @user.FirstName
@@ -52,7 +54,7 @@
                             <ul>
                                 @foreach (var rol in roles)
                                 {
-                                @rol
+                                   @rol
                                 }
                             </ul>
                         }
@@ -61,12 +63,24 @@
                             <span>Sin rol</span>
                         }
                     </div>
-                    <div>
-
+                    <div class="project-members" data-label="Horario">
+                        @if (horarios.Any())
+                        {
+                            <ul>
+                                @foreach (var horario in horarios)
+                                {
+                                    <li>@horario.DiaSemana: @horario.HoraInicio.ToString(@"hh\:mm") - @horario.HoraFin.ToString(@"hh\:mm")</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span>Sin horarios</span>
+                        }
                     </div>
                     <div class="project-completion" data-label="Acciones">
-                        <a class="btn btn-sm btn-primary" asp-page="./Editar" asp-route-id="@user.Id">Editar</a>
-                        <a class="btn btn-sm btn-danger" asp-page="./Eliminar" asp-route-id="@user.Id">Eliminar</a>
+                        <a class="btn btn-primary btn-sm" href="/Admin/UsuariosT/Edit?id=@user.Id">Editar</a>
+                        <a class="btn btn-danger btn-sm" href="/Admin/UsuariosT/Delete?id=@user.Id">Eliminar</a>
                     </div>
                 </div>
             }
