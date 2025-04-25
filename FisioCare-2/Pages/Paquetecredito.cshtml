@@ -1,0 +1,42 @@
+﻿@page
+@model FisioCare_2.Pages.PaquetecreditoModel
+@{
+    Layout = "_Layout";
+}
+
+<main class="flex-shrink-0">
+    <section class="bg-light py-5">
+        <div class="container px-5 my-5">
+            <div class="text-center mb-5">
+                <h1 class="fw-bolder">Elige tu paquete</h1>
+                <p class="lead fw-normal text-muted mb-0">Compra créditos según tus necesidades</p>
+            </div>
+            <div class="row gx-5 justify-content-center">
+                @foreach (var paquete in Model.Paquetes)
+                {
+                    <div class="col-lg-6 col-xl-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body p-5">
+                                <div class="small text-uppercase fw-bold text-muted">@paquete.Nombre</div>
+                                <div class="mb-3">
+                                    <span class="display-6 fw-bold">$@paquete.Precio</span>
+                                </div>
+                                <ul class="list-unstyled mb-4">
+                                    <li class="mb-2">
+                                        <i class="bi bi-check text-primary"></i>
+                                        Créditos: <strong>@paquete.CantidadCreditos</strong>
+                                    </li>
+                                    <li class="mb-2 text-muted">
+                                        <i class="bi bi-info-circle text-secondary"></i>
+                                        @paquete.Descripcion
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+</main>
