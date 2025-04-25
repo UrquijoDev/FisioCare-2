@@ -1,0 +1,58 @@
+﻿@page
+@model FisioCare_2.Pages.Admin.PaquetesCreditosConf.IndexModel
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<div class="row mb-5">
+    <div class="col">
+        <a class="btn btn-primary" asp-page='/Admin/PaquetesCreditosConf/Create'>Nuevo Paquete</a>
+    </div>
+</div>
+
+<section class="projects-section card">
+    <div class="card-header">
+        <h2>Paquetes de Créditos</h2>
+        <p class="subtitle">Listado de paquetes de créditos disponibles para los usuarios</p>
+    </div>
+    <div class="projects-list-container">
+        <div class="projects-list">
+            <div class="project-header-row">
+                <span>Nombre</span>
+                <span>Precio</span>
+                <span>Cantidad de Créditos</span>
+                <span>Descripción</span>
+                <span>Acciones</span>
+            </div>
+
+            @foreach (var paquete in Model.PaquetesCredito)
+            {
+                <div class="project-row">
+                    <div class="project-company" data-label="Nombre">
+                        @paquete.Nombre
+                    </div>
+                    <div class="project-budget" data-label="Precio">
+                        @paquete.Precio.ToString("C") <!-- Formatea el precio en moneda -->
+                    </div>
+                    <div class="project-members" data-label="Cantidad de Créditos">
+                        @paquete.CantidadCreditos
+                    </div>
+                    <div class="project-members" data-label="Descripción">
+                        @if (!string.IsNullOrEmpty(paquete.Descripcion))
+                        {
+                            <span>@paquete.Descripcion</span>
+                        }
+                        else
+                        {
+                            <span>Sin descripción</span>
+                        }
+                    </div>
+                    <div class="project-completion" data-label="Acciones">
+                        <a class="btn btn-primary btn-sm" href="/Admin/PaquetesCreditosConf/Edit?id=@paquete.Id">Editar</a>
+                        <a class="btn btn-danger btn-sm" href="/Admin/PaquetesCreditosConf/Delete?id=@paquete.Id">Eliminar</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

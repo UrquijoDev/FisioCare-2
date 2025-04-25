@@ -20,9 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Admin\GestionCreditos\" />
-    <Folder Include="Pages\Admin\PaquetesCreditos\" />
-    <Folder Include="Pages\Admin\ServiciosFisio\" />
+    <Folder Include="Pages\Admin\GestionCreditosConf\" />
+    <Folder Include="Pages\Admin\ServiciosFisioConf\" />
     <Folder Include="Pages\Fisioterapeuta\" />
     <Folder Include="Pages\Recepcionista\" />
     <Folder Include="Pages\Paciente\" />

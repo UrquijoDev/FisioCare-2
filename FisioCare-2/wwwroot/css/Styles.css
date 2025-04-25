@@ -678,3 +678,11 @@ progress {
         min-width: 100px;
     }
 }
+
+.project-members span {
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+    display: block; /* Esto asegura que el texto ocupe más de una línea si es necesario */
+    max-width: 100%; /* Esto asegura que el contenedor no se desborde */
+}

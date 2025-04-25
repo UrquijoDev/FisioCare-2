@@ -11,7 +11,7 @@ namespace FisioCare_2.Services
         {
         }
         public DbSet<Horario> Horarios { get; set; }
-
+        public DbSet<PaqueteCredito> PaquetesCredito { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
