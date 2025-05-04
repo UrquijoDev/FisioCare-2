@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="Pages\Admin\GestionCreditosConf\" />
-    <Folder Include="Pages\Admin\ServiciosFisioConf\" />
     <Folder Include="Pages\Fisioterapeuta\" />
     <Folder Include="Pages\Recepcionista\" />
     <Folder Include="Pages\Paciente\" />

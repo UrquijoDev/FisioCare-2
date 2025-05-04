@@ -1,0 +1,73 @@
+﻿@page
+@model FisioCare_2.Pages.Admin.ServiciosFisioConf.CreateModel
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<div class="row">
+    <div class="col-md-8 mx-auto rounded border p-3">
+        <h2 class="text-center mb-5">Nuevo Servicio</h2>
+
+        @if (!string.IsNullOrEmpty(Model.errorMessage))
+        {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>@Model.errorMessage</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(Model.successMessage))
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>@Model.successMessage</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Nombre del Servicio</label>
+                <input class="form-control" asp-for="Servicio.Nombre" />
+                <span asp-validation-for="Servicio.Nombre" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea class="form-control" asp-for="Servicio.Descripcion" rows="3"></textarea>
+                <span asp-validation-for="Servicio.Descripcion" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Créditos necesarios</label>
+                <input class="form-control" asp-for="Servicio.CreditosNecesarios" />
+                <span asp-validation-for="Servicio.CreditosNecesarios" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Precio Referencia</label>
+                <input class="form-control" asp-for="Servicio.PrecioReferencia" />
+                <span asp-validation-for="Servicio.PrecioReferencia" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Duración (hh:mm:ss)</label>
+                <input class="form-control" asp-for="Servicio.Duracion" placeholder="00:45:00" />
+                <span asp-validation-for="Servicio.Duracion" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Características (separadas por coma)</label>
+                <textarea class="form-control" asp-for="FeaturesAsString" rows="3" placeholder="Ej. Ejercicios personalizados, Evaluación física inicial"></textarea>
+                <span class="text-muted">Por favor, separa cada característica con una coma.</span>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 d-grid">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+                <div class="col-sm-6 d-grid">
+                    <a class="btn btn-outline-primary" asp-page="./Index">Cancelar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

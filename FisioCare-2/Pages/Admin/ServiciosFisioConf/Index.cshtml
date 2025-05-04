@@ -1,0 +1,81 @@
+﻿@page
+@model FisioCare_2.Pages.Admin.ServiciosFisioConf.IndexModel
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<div class="row mb-5">
+    <div class="col">
+        <a class="btn btn-primary" asp-page='/Admin/ServiciosFisioConf/Create'>Nuevo Servicio</a>
+    </div>
+</div>
+
+<section class="projects-section card">
+    <div class="card-header">
+        <h2>Servicios de Fisioterapia</h2>
+        <p class="subtitle">Listado de servicios disponibles</p>
+    </div>
+    <div class="projects-list-container">
+        <div class="projects-list">
+            <div class="project-header-row">
+                <span>Nombre</span>
+                <span>Duración</span>
+                <span>Créditos</span>
+                <span>Precio Ref.</span>
+                <span>Descripción</span>
+                <span>Características</span>  <!-- Nueva columna para características -->
+                <span>Acciones</span>
+            </div>
+
+            @foreach (var servicio in Model.Servicios)
+            {
+                <div class="project-row">
+                    <div class="project-company" data-label="Nombre">
+                        @servicio.Nombre
+                    </div>
+                    <div class="project-budget" data-label="Duración">
+                        @($"{(int)servicio.Duracion.TotalMinutes} min")
+                    </div>
+                    <div class="project-members" data-label="Créditos">
+                        @servicio.CreditosNecesarios
+                    </div>
+                    <div class="project-members" data-label="Precio Ref.">
+                        @servicio.PrecioReferencia.ToString("C")
+                    </div>
+                    <div class="project-members" data-label="Descripción">
+                        @if (!string.IsNullOrEmpty(servicio.Descripcion))
+                        {
+                            <span>@servicio.Descripcion</span>
+                        }
+                        else
+                        {
+                            <span>Sin descripción</span>
+                        }
+                    </div>
+
+                    <!-- Nueva columna para mostrar las características como lista -->
+                    <div class="project-members" data-label="Características">
+                        @if (servicio.Features != null && servicio.Features.Any())
+                        {
+                            <ul>
+                                @foreach (var feature in servicio.Features)
+                                {
+                                    <li>@feature.Description</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span>No hay características</span>
+                        }
+                    </div>
+
+                    <div class="project-completion" data-label="Acciones">
+                        <a class="btn btn-primary btn-sm" href="/Admin/ServiciosFisioConf/Edit?id=@servicio.Id">Editar</a>
+                        <a class="btn btn-danger btn-sm" href="/Admin/ServiciosFisioConf/Delete?id=@servicio.Id">Eliminar</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
