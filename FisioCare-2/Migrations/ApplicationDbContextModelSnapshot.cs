@@ -121,7 +121,7 @@ namespace FisioCare_2.Migrations
 
                     b.HasIndex("ServicioId");
 
-                    b.ToTable("Feature");
+                    b.ToTable("Feature", (string)null);
                 });
 
             modelBuilder.Entity("FisioCare_2.Models.Horario", b =>
@@ -149,7 +149,7 @@ namespace FisioCare_2.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Horarios");
+                    b.ToTable("Horarios", (string)null);
                 });
 
             modelBuilder.Entity("FisioCare_2.Models.PaqueteCredito", b =>
@@ -180,7 +180,7 @@ namespace FisioCare_2.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaquetesCredito");
+                    b.ToTable("PaquetesCredito", (string)null);
                 });
 
             modelBuilder.Entity("FisioCare_2.Models.Servicio", b =>
@@ -212,7 +212,7 @@ namespace FisioCare_2.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Servicio");
+                    b.ToTable("Servicio", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

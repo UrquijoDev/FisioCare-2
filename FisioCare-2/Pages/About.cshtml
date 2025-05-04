@@ -65,59 +65,21 @@
                     <p class="lead fw-normal text-muted mb-5">Profesionales dedicados a tu salud</p>
                 </div>
                 <div class="row gx-5 row-cols-1 row-cols-sm-2 row-cols-xl-4 justify-content-center">
-                    <div class="col mb-5">
-                        <div class="text-center">
-                            <img class="img-fluid rounded-circle mb-4 px-4" src="https://dummyimage.com/150x150/91c5d8/ffffff&text=F1" alt="Fisioterapeuta" />
-                            <h5 class="fw-bolder">Dra. Laura Méndez</h5>
-                            <div class="fst-italic text-muted">Directora Médica</div>
+                    @foreach (var member in Model.TeamMembers)
+                    {
+                        <div class="col mb-5">
+                            <div class="text-center">
+                                <img class="img-fluid rounded-circle mb-4 px-4"
+                                     src="@Url.Content($"~/img/users/{member.ImageFileName}")"
+                                     alt="@member.FullName" />
+                                <h5 class="fw-bolder">@member.FullName</h5>
+                                <div class="fst-italic text-muted">@member.Role</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col mb-5">
-                        <div class="text-center">
-                            <img class="img-fluid rounded-circle mb-4 px-4" src="https://dummyimage.com/150x150/91c5d8/ffffff&text=F2" alt="Fisioterapeuta" />
-                            <h5 class="fw-bolder">Lic. Jorge Rivas</h5>
-                            <div class="fst-italic text-muted">Fisioterapeuta Deportivo</div>
-                        </div>
-                    </div>
-                    <div class="col mb-5">
-                        <div class="text-center">
-                            <img class="img-fluid rounded-circle mb-4 px-4" src="https://dummyimage.com/150x150/91c5d8/ffffff&text=F3" alt="Recepción" />
-                            <h5 class="fw-bolder">Ana Campos</h5>
-                            <div class="fst-italic text-muted">Atención al Cliente</div>
-                        </div>
-                    </div>
-                    <div class="col mb-5">
-                        <div class="text-center">
-                            <img class="img-fluid rounded-circle mb-4 px-4" src="https://dummyimage.com/150x150/91c5d8/ffffff&text=F4" alt="Administración" />
-                            <h5 class="fw-bolder">Ricardo Morales</h5>
-                            <div class="fst-italic text-muted">Coordinador Administrativo</div>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
         </section>
+
     </main>
-
-    <!-- Footer -->
-    <footer class="bg-dark py-4 mt-auto">
-        <div class="container px-5">
-            <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-                <div class="col-auto">
-                    <div class="small m-0 text-white">© FisioCare 2025 - Todos los derechos reservados</div>
-                </div>
-                <div class="col-auto">
-                    <a class="link-light small" href="#!">Aviso de privacidad</a>
-                    <span class="text-white mx-1">·</span>
-                    <a class="link-light small" href="#!">Términos</a>
-                    <span class="text-white mx-1">·</span>
-                    <a class="link-light small" href="#!">Contacto</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Bootstrap core JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS -->
-    <script src="js/scripts.js"></script>
 </body>

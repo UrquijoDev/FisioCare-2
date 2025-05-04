@@ -1,5 +1,6 @@
 using FisioCare_2.Models;
 using FisioCare_2.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace FisioCare_2.Pages.Admin.PaquetesCreditosConf
 {
+    [Authorize(Roles = "Admin")]
     public class DeleteModel : PageModel
     {
         private readonly ApplicationDbContext _context;

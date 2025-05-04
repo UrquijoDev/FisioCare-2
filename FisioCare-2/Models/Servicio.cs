@@ -12,10 +12,10 @@ namespace FisioCare_2.Models
         [StringLength(500)]
         public string Descripcion { get; set; } = string.Empty;
 
-        [Range(1, 100)]
+        [Range(0, int.MaxValue)]
         public int CreditosNecesarios { get; set; }
 
-        [Range(0, 10000)]
+        [Range(0, int.MaxValue)]
         public decimal PrecioReferencia { get; set; } // Opcional: si también permites pagar sin créditos
 
         [DataType(DataType.Duration)]

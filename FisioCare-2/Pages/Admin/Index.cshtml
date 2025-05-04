@@ -6,46 +6,66 @@
 <section class="dashboard-grid">
     <section class="projects-section card">
         <div class="card-header">
-            <h2>Últimos usuarios Registrados</h2>
-            <p class="subtitle">Resumen de los más recientes</p>
+            <h2>Últimos Empleados Registrados</h2>
+            <p class="subtitle">Resumen de fisioterapeutas y recepcionistas recientes</p>
         </div>
         <div class="projects-list-container">
             <div class="projects-list">
                 <div class="project-header-row">
-                    <span>Título</span>
-                    <span>Descripción</span>
+                    <span>Nombre</span>
+                    <span>Rol</span>
                 </div>
-               @*  @foreach (var project in Model.ProjectPreview)
+                @foreach (var empleado in Model.EmpleadosRecientes)
                 {
                     <div class="project-row">
-                        <div class="project-company" data-label="Título">
-                            <strong>@project.Title</strong>
+                        <div class="project-company" data-label="Nombre">
+                            <strong>@empleado.FullName</strong>
                         </div>
-                        <div class="project-budget" data-label="Descripción">
-                            @project.Description
+                        <div class="project-budget" data-label="Rol">
+                            @empleado.Role
                         </div>
                     </div>
-                } *@
+                }
             </div>
         </div>
     </section>
 
     <aside class="sidebar-cards-section">
+        <!-- Paquetes de créditos recientes -->
         <section class="reviews-card card">
             <div class="card-header">
-                <h2>Paquetes de Creditos Recientes</h2>
+                <h2>Paquetes de Créditos Recientes</h2>
             </div>
             <ul class="orders-list">
-              @*   @foreach (var service in Model.ServicePreview)
+                @foreach (var paquete in Model.PaquetesRecientes)
                 {
                     <li class="order-item">
                         <span class="order-icon green">📦</span>
                         <div class="order-details">
-                            <span class="order-title">@service.Name</span>
-                            <span class="order-time">@service.Price</span>
+                            <span class="order-title">@paquete.Nombre</span>
+                            <span class="order-time">$@paquete.Precio</span>
                         </div>
                     </li>
-                } *@
+                }
+            </ul>
+        </section>
+
+        <!-- Servicios recientes -->
+        <section class="reviews-card card">
+            <div class="card-header">
+                <h2>Servicios Recientes</h2>
+            </div>
+            <ul class="orders-list">
+                @foreach (var servicio in Model.ServiciosRecientes)
+                {
+                    <li class="order-item">
+                        <span class="order-icon blue">🛠️</span>
+                        <div class="order-details">
+                            <span class="order-title">@servicio.Nombre</span>
+                            <span class="order-time">@servicio.CreditosNecesarios créditos</span>
+                        </div>
+                    </li>
+                }
             </ul>
         </section>
     </aside>

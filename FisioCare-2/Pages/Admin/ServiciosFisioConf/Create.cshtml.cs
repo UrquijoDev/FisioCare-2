@@ -1,10 +1,12 @@
 using FisioCare_2.Models;
 using FisioCare_2.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FisioCare_2.Pages.Admin.ServiciosFisioConf
 {
+    [Authorize(Roles = "Admin")]
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;

@@ -1,5 +1,6 @@
 using FisioCare_2.Models;
 using FisioCare_2.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FisioCare_2.Pages.Admin.UsuariosT
 {
+    [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;

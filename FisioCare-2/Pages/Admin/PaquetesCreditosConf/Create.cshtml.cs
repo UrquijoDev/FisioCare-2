@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using FisioCare_2.Models;
 using System.Threading.Tasks;
 using FisioCare_2.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FisioCare_2.Pages.Admin.PaquetesCreditosConf
 {
+    [Authorize(Roles = "Admin")]
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
