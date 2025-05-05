@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using FisioCare_2.Models;
 using FisioCare_2.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FisioCare_2.Pages.Admin
 {
+    [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;

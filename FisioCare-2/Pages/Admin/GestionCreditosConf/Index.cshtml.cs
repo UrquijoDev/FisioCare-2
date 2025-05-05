@@ -3,6 +3,10 @@ using FisioCare_2.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 namespace FisioCare_2.Pages.Admin.GestionCreditosConf
 {
     public class IndexModel : PageModel
@@ -21,8 +25,21 @@ namespace FisioCare_2.Pages.Admin.GestionCreditosConf
         {
             PaquetesCredito = await _context.PaquetesCredito.ToListAsync();
 
+            // Obtener RoleId del rol "Paciente"
+            var pacienteRoleId = await _context.Roles
+                .Where(r => r.Name == "PACIENTE")
+                .Select(r => r.Id)
+                .FirstOrDefaultAsync();
+
+            // Obtener IDs de los usuarios con ese rol
+            var userIdsConRolPaciente = await _context.UserRoles
+                .Where(ur => ur.RoleId == pacienteRoleId)
+                .Select(ur => ur.UserId)
+                .ToListAsync();
+
+            // Traer los usuarios con ese ID
             Pacientes = await _context.Users
-                .Where(u => u.UserName != null) // Puedes aplicar filtro por rol aquí si lo deseas
+                .Where(u => userIdsConRolPaciente.Contains(u.Id))
                 .ToListAsync();
         }
 

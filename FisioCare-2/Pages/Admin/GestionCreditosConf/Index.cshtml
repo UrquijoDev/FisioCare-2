@@ -3,12 +3,15 @@
 @{
     Layout = "_LayoutAdmin";
 }
-
-<div class="row mb-5">
-    <div class="col">
-        <a class="btn btn-primary" asp-page='/Admin/PaquetesCreditosConf/Create'>Nuevo Paquete</a>
-    </div>
-</div>
+<!-- Mensajes de éxito o error -->
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+else if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
 
 <section class="projects-section card">
     <div class="card-header">
@@ -18,21 +21,23 @@
     <div class="row mb-4">
         <div class="col">
             <h4>Asignar Créditos a un Paciente</h4>
-            <form method="post" asp-page-handler="AsignarCreditos">
+            <form method="post" asp-page-handler="AsignarCreditos" onsubmit="return validarPaciente();">
                 <div class="form-group">
-                    <label for="PacienteId">Seleccionar Paciente</label>
-                    <select class="form-control" id="PacienteId" name="PacienteId" required>
-                        <option value="">Seleccione un paciente</option>
+                    <label for="PacienteSearch">Buscar Paciente (por nombre o correo)</label>
+                    <input type="text" class="form-control" id="PacienteSearch" list="PacientesList" placeholder="Ej. Juan Pérez (juan@mail.com)" required />
+                    <datalist id="PacientesList">
                         @foreach (var paciente in Model.Pacientes)
                         {
-                            <option value="@paciente.Id">@paciente.FirstName</option>
+                            <option value="@paciente.FirstName (@paciente.Email)" data-id="@paciente.Id"></option>
                         }
-                    </select>
+                    </datalist>
+                    <input type="hidden" name="pacienteId" id="PacienteId" />
+                    <small class="text-danger d-none" id="PacienteError">Debe seleccionar un paciente válido de la lista.</small>
                 </div>
 
                 <div class="form-group">
                     <label for="PaqueteId">Seleccionar Paquete de Créditos</label>
-                    <select class="form-control" id="PaqueteId" name="PaqueteId" required>
+                    <select class="form-control" id="PaqueteId" name="paqueteId" required>
                         <option value="">Seleccione un paquete</option>
                         @foreach (var paquete in Model.PaquetesCredito)
                         {
@@ -48,3 +53,28 @@
         </div>
     </div>
 </section>
+
+<script>
+    const datalistOptions = [...document.querySelectorAll("#PacientesList option")];
+
+    document.getElementById("PacienteSearch").addEventListener("input", function () {
+        const input = this.value.toLowerCase();
+        const match = datalistOptions.find(option => option.value.toLowerCase() === input);
+
+        if (match) {
+            document.getElementById("PacienteId").value = match.getAttribute("data-id");
+            document.getElementById("PacienteError").classList.add("d-none");
+        } else {
+            document.getElementById("PacienteId").value = "";
+        }
+    });
+
+    function validarPaciente() {
+        const pacienteId = document.getElementById("PacienteId").value;
+        if (!pacienteId) {
+            document.getElementById("PacienteError").classList.remove("d-none");
+            return false;
+        }
+        return true;
+    }
+</script>
