@@ -127,11 +127,15 @@ namespace FisioCare_2.Areas.Identity.Pages.Account
                     }
                     else if (roles.Contains("Fisioterapeuta"))
                     {
-                        return LocalRedirect("~/Fisio/Panel");
+                        return LocalRedirect("~/Fisioterapeuta/Index");
                     }
                     else if (roles.Contains("Paciente"))
                     {
-                        return LocalRedirect("~/Paciente/Inicio");
+                        return LocalRedirect("~/Paciente/Index");
+                    }
+                    else if (roles.Contains("Recepcionista"))
+                    {
+                        return LocalRedirect("~/Recepcionista/Index");
                     }
 
                     // Si no tiene rol conocido, redirige al home por default
