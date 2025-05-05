@@ -1,0 +1,187 @@
+﻿@page
+@model FisioCare_2.Pages.Paciente.Appointment.CreateModel
+@{
+    Layout = "_Layout";
+}
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Clínica de Fisioterapia Salud Integral</h1>
+            <p class="subtitle">Agenda tu cita de manera rápida y sencilla</p>
+        </header>
+
+        <div class="booking-steps">
+            <div class="step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Terapeuta</div>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Servicio</div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Fecha y Hora</div>
+            </div>
+            <div class="step" data-step="4">
+                <div class="step-number">4</div>
+                <div class="step-label">Confirmación</div>
+            </div>
+        </div>
+
+        <div class="booking-form">
+            <!-- Paso 1: Seleccionar terapeuta -->
+            <div class="form-section active" id="step-1">
+                <h2>Selecciona tu fisioterapeuta</h2>
+
+                <select class="select-therapist" id="therapist-select">
+                    <option value="">-- Selecciona un terapeuta --</option>
+                    <option value="1">Dra. Ana Martínez - Rehabilitación</option>
+                    <option value="2">Dr. Carlos López - Masaje Terapéutico</option>
+                    <option value="3">Dra. Sofía Ramírez - Electroterapia</option>
+                    <option value="4">Dr. Javier Gómez - Fisioterapia Deportiva</option>
+                </select>
+
+                <div class="therapists-container" id="therapist-cards">
+                    <div class="therapist-card" data-id="1">
+                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Dra. Ana Martínez" class="therapist-photo">
+                        <h3 class="therapist-name">Dra. Ana Martínez</h3>
+                        <p class="therapist-specialty">Rehabilitación</p>
+                        <p>Experiencia: 10 años</p>
+                    </div>
+                    <div class="therapist-card" data-id="2">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Dr. Carlos López" class="therapist-photo">
+                        <h3 class="therapist-name">Dr. Carlos López</h3>
+                        <p class="therapist-specialty">Masaje Terapéutico</p>
+                        <p>Experiencia: 8 años</p>
+                    </div>
+                    <div class="therapist-card" data-id="3">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Dra. Sofía Ramírez" class="therapist-photo">
+                        <h3 class="therapist-name">Dra. Sofía Ramírez</h3>
+                        <p class="therapist-specialty">Electroterapia</p>
+                        <p>Experiencia: 12 años</p>
+                    </div>
+                    <div class="therapist-card" data-id="4">
+                        <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Dr. Javier Gómez" class="therapist-photo">
+                        <h3 class="therapist-name">Dr. Javier Gómez</h3>
+                        <p class="therapist-specialty">Fisioterapia Deportiva</p>
+                        <p>Experiencia: 7 años</p>
+                    </div>
+                </div>
+
+                <div class="error-message" id="therapist-error">Por favor selecciona un terapeuta</div>
+
+                <div class="navigation-buttons">
+                    <button class="btn-secondary btn-disabled" disabled>Anterior</button>
+                    <button class="btn-primary" id="next-1">Siguiente</button>
+                </div>
+            </div>
+
+            <!-- Paso 2: Seleccionar servicio -->
+            <div class="form-section" id="step-2">
+                <h2>Selecciona el servicio que necesitas</h2>
+
+                <div class="form-group">
+                    <label for="service">Servicio de fisioterapia</label>
+                    <select id="service">
+                        <option value="">-- Selecciona un servicio --</option>
+                        <option value="rehabilitacion">Rehabilitación física</option>
+                        <option value="masaje">Masaje terapéutico</option>
+                        <option value="electroterapia">Electroterapia</option>
+                        <option value="deportiva">Fisioterapia deportiva</option>
+                        <option value="quiropraxia">Quiropraxia</option>
+                        <option value="acupuntura">Acupuntura</option>
+                    </select>
+                    <div class="error-message" id="service-error">Por favor selecciona un servicio</div>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button class="btn-secondary" id="prev-2">Anterior</button>
+                    <button class="btn-primary" id="next-2">Siguiente</button>
+                </div>
+            </div>
+
+            <!-- Paso 3: Seleccionar fecha y hora -->
+            <div class="form-section" id="step-3">
+                <h2>Selecciona fecha y hora para tu cita</h2>
+
+                <div class="calendar">
+                    <div class="calendar-header">
+                        <div class="calendar-title" id="current-month">Junio 2023</div>
+                        <div class="calendar-nav">
+                            <button id="prev-month">&lt;</button>
+                            <button id="next-month">&gt;</button>
+                        </div>
+                    </div>
+
+                    <div class="calendar-grid" id="calendar-days-header">
+                        <div class="calendar-day-header">Dom</div>
+                        <div class="calendar-day-header">Lun</div>
+                        <div class="calendar-day-header">Mar</div>
+                        <div class="calendar-day-header">Mié</div>
+                        <div class="calendar-day-header">Jue</div>
+                        <div class="calendar-day-header">Vie</div>
+                        <div class="calendar-day-header">Sáb</div>
+                    </div>
+
+                    <div class="calendar-grid" id="calendar-days"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Horarios disponibles</label>
+                    <div class="time-slots" id="time-slots">
+                        <!-- Los horarios se generan dinámicamente con JavaScript -->
+                    </div>
+                    <div class="error-message" id="datetime-error">Por favor selecciona una fecha y hora</div>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button class="btn-secondary" id="prev-3">Anterior</button>
+                    <button class="btn-primary" id="next-3">Siguiente</button>
+                </div>
+            </div>
+
+            <!-- Paso 4: Resumen y confirmación -->
+            <div class="form-section" id="step-4">
+                <h2>Resumen de tu cita</h2>
+
+                <div class="summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Fisioterapeuta:</span>
+                        <span class="summary-value" id="summary-therapist">Dra. Ana Martínez</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Servicio:</span>
+                        <span class="summary-value" id="summary-service">Rehabilitación física</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Fecha:</span>
+                        <span class="summary-value" id="summary-date">15 de Junio, 2023</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Hora:</span>
+                        <span class="summary-value" id="summary-time">10:00 AM</span>
+                    </div>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button class="btn-secondary" id="prev-4">Anterior</button>
+                    <button class="btn-primary" id="confirm-appointment">Confirmar cita</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmación final -->
+        <div class="booking-form confirmation" id="confirmation" style="display: none;">
+            <div class="confirmation-icon">✓</div>
+            <h2>¡Cita agendada con éxito!</h2>
+            <p>Hemos programado tu cita y te hemos enviado un correo de confirmación con todos los detalles.</p>
+            <p>Recuerda llegar 10 minutos antes de tu cita.</p>
+            <button class="btn-primary" id="new-appointment">Agendar nueva cita</button>
+        </div>
+    </div>
+
+</body>
+
+<script src="~/js/cita.js"></script>

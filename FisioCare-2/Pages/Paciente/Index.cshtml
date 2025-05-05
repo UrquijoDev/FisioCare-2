@@ -3,3 +3,117 @@
 @{
     Layout = "_Layout";
 }
+<main class="container-fluid p-4">
+    <!-- Encabezado -->
+    <div class="row mb-4">
+        <div class="col-12 col-md-8">
+            <p class="text-muted">Bienvenido a tu portal de pacientes</p>
+        </div>
+        <div class="col-12 col-md-4 d-flex align-items-center justify-content-end">
+            <span class="badge bg-secondary text-light">
+                <i class="bi bi-bell-fill me-2"></i>Tienes 1 recordatorio pendiente
+            </span>
+        </div>
+    </div>
+
+    <!-- Sección de citas -->
+    <div class="row g-4">
+        <!-- Próxima cita -->
+        <div class="col-12 col-lg-6">
+            <div class="card border-secondary rounded-4 shadow-sm h-100">
+                <div class="card-header bg-secondary text-white">
+                    <i class="bi bi-calendar-check me-2"></i>Próxima cita
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">6 de Mayo 2024</h3>
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-clock-history fs-5 text-secondary me-3"></i>
+                        <div>
+                            <p class="mb-0">3:00 PM - 4:00 PM</p>
+                            <small class="text-muted">Duración estimada: 1 hora</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-person-badge fs-5 text-secondary me-3"></i>
+                        <div>
+                            <p class="mb-0">Dra. María Rodríguez</p>
+                            <small class="text-muted">Fisioterapia traumatológica</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agendar nueva cita -->
+        <div class="col-12 col-lg-6">
+            <div class="card bg-light border-muted rounded-4 shadow-sm h-100">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center text-center py-5">
+                    <i class="bi bi-plus-circle display-4 text-muted mb-4"></i>
+                    <h3 class="mb-3">¿Necesitas una nueva cita?</h3>
+                    <a asp-page="Appointment/Create" class="btn btn-success btn-lg w-75">Agendar ahora</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Historial de citas y recordatorios -->
+    <div class="row mt-4 g-4">
+        <!-- Historial -->
+        <div class="col-12 col-lg-8">
+            <div class="card rounded-4 shadow-sm">
+                <div class="card-header bg-white">
+                    <i class="bi bi-clock-history me-2"></i>Últimas consultas
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Especialista</th>
+                                    <th>Motivo</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>15/04/2024</td>
+                                    <td>Dra. Rodríguez</td>
+                                    <td>Seguimiento postoperatorio</td>
+                                    <td><span class="badge bg-success">Completada</span></td>
+                                    <td>
+                                        <a class="btn btn-outline-primary btn-sm" href="/Admin/PaquetesCreditosConf/Edit?id=">Editar</a>
+                                        <a class="btn btn-outline-danger btn-sm" href="/Admin/PaquetesCreditosConf/Delete?id=">Eliminar</a>
+                                    </td>
+
+                                </tr>
+                                <!-- Puedes agregar más registros aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recordatorios -->
+        <div class="col-12 col-lg-4">
+            <div class="card border-muted rounded-4 shadow-sm">
+                <div class="card-header bg-light text-dark">
+                    <i class="bi bi-exclamation-triangle me-2"></i>Recordatorios importantes
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex">
+                        <i class="bi bi-info-circle me-3 text-muted"></i>
+                        Llevar estudios de imagen a la próxima cita
+                    </li>
+                    <li class="list-group-item d-flex">
+                        <i class="bi bi-info-circle me-3 text-muted"></i>
+                        Ayuno de 3 horas previo a la terapia
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>

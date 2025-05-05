@@ -14,6 +14,7 @@ namespace FisioCare_2.Services
         public DbSet<PaqueteCredito> PaquetesCredito { get; set; }
         public DbSet<Servicio> Servicio { get; set; }
         public DbSet<TransaccionCredito> TransaccionCredito { get; set; }
+        public DbSet<Cita> Cita {  get; set; }
 
         public DbSet<Feature> Feature { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
@@ -50,6 +51,26 @@ namespace FisioCare_2.Services
 
             builder.Entity<IdentityRole>().HasData(admin, paciente, fisioterapeuta, recepcionista);
 
+            // Relación UsuarioId con no eliminación en cascada
+            builder.Entity<Cita>()
+                .HasOne(c => c.Usuario)
+                .WithMany()
+                .HasForeignKey(c => c.UsuarioId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Relación FisioterapeutaId con no eliminación en cascada
+            builder.Entity<Cita>()
+                .HasOne(c => c.Fisioterapeuta)
+                .WithMany()
+                .HasForeignKey(c => c.FisioterapeutaId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Relación ServicioId con eliminación en cascada
+            builder.Entity<Cita>()
+                .HasOne(c => c.Servicio)
+                .WithMany()
+                .HasForeignKey(c => c.ServicioId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     
     

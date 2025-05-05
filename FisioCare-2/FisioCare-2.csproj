@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="Pages\Fisioterapeuta\" />
-    <Folder Include="Pages\Paciente\Appointment\" />
     <Folder Include="Pages\Recepcionista\" />
     <Folder Include="wwwroot\img\users\" />
   </ItemGroup>
