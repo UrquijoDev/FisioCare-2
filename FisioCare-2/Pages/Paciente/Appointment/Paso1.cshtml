@@ -1,0 +1,115 @@
+﻿@page
+@model FisioCare_2.Pages.Paciente.Appointment.Paso1Model
+@{
+    Layout = "_Layout";
+}
+<div class="container">
+    <header>
+        <h1>Clínica de Fisioterapia Salud Integral</h1>
+        <p class="subtitle">Agenda tu cita de manera rápida y sencilla</p>
+    </header>
+
+    <div class="booking-steps">
+        <div class="step active" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-label">Terapeuta</div>
+        </div>
+        <div class="step" data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-label">Servicio</div>
+        </div>
+        <div class="step" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-label">Fecha y Hora</div>
+        </div>
+        <div class="step" data-step="4">
+            <div class="step-number">4</div>
+            <div class="step-label">Confirmación</div>
+        </div>
+    </div>
+
+    <div class="booking-form">
+        <!-- Paso 1: Seleccionar terapeuta -->
+        <div>
+            <h2>Selecciona tu fisioterapeuta</h2>
+
+            <select asp-for="FisioterapeutaId" class="select-therapist" id="therapist-select">
+                <option value="">Seleccione un fisioterapeuta</option>
+                @foreach (var fisio in Model.Fisioterapeutas)
+                {
+                    <option value="@fisio.Id">@fisio.FirstName @fisio.LastName</option>
+                }
+            </select>
+
+            <div class="therapists-container" id="therapist-cards">
+                @foreach (var fisio in Model.Fisioterapeutas)
+                {
+                    <div class="therapist-card" data-id="@fisio.Id">
+                        <img src="~/img/users/@fisio.ImageFileName" alt="@fisio.FirstName @fisio.LastName" class="therapist-photo" />
+                        <h3 class="therapist-name">@fisio.FirstName @fisio.LastName</h3>
+                        <p class="therapist-specialty"></p>
+                    </div>
+                }
+            </div>
+
+            <div class="error-message" id="therapist-error" style="display: none;">Por favor selecciona un terapeuta</div>
+
+            <div class="navigation-buttons">
+                <button class="btn-secondary btn-disabled" disabled>Anterior</button>
+
+                <form method="get" asp-page="Paso2" onsubmit="return validateTherapistSelection()" style="display: inline;">
+                    <input type="hidden" name="FisioterapeutaId" id="selectedTherapistId" />
+                    <button type="submit" class="btn-primary">Siguiente</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/cita.js"></script>
+<script>
+    // Obtener elementos clave
+    const therapistSelect = document.getElementById("therapist-select");
+    const therapistCards = document.querySelectorAll(".therapist-card");
+    const selectedInput = document.getElementById("selectedTherapistId");
+    const errorMsg = document.getElementById("therapist-error");
+
+    // Cuando cambian el select
+    therapistSelect.addEventListener("change", function () {
+        const selectedId = this.value;
+        selectedInput.value = selectedId;
+
+        therapistCards.forEach(card => {
+            if (card.dataset.id === selectedId) {
+                card.setAttribute("data-selected", "true");
+            } else {
+                card.removeAttribute("data-selected");
+            }
+        });
+
+        errorMsg.style.display = "none";
+    });
+
+    // Cuando hacen click en una tarjeta
+    therapistCards.forEach(card => {
+        card.addEventListener("click", function () {
+            const selectedId = this.dataset.id;
+            selectedInput.value = selectedId;
+            therapistSelect.value = selectedId;
+
+            therapistCards.forEach(c => c.removeAttribute("data-selected"));
+            this.setAttribute("data-selected", "true");
+
+            errorMsg.style.display = "none";
+        });
+    });
+
+    // Validación al dar siguiente
+    function validateTherapistSelection() {
+        if (!selectedInput.value) {
+            errorMsg.style.display = "block";
+            return false;
+        }
+        return true;
+    }
+</script>

@@ -1,18 +1,19 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using FisioCare_2.Models;
 using FisioCare_2.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace FisioCare_2.Pages.Paciente.Appointment
 {
-    public class CreateModel : PageModel
+    public class Paso1Model : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _context;
 
-        public CreateModel(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
+        public Paso1Model(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -42,25 +43,5 @@ namespace FisioCare_2.Pages.Paciente.Appointment
             // Cargar servicios desde la base de datos
             Servicios = _context.Servicio.ToList();
         }
-        public async Task<IActionResult> OnPostAsync()
-        {
-
-            var idSeleccionado = FisioterapeutaId;
-
-            // Imprimir en consola
-            Console.WriteLine($"ID seleccionado del fisioterapeuta: {idSeleccionado}");
-            // Buscar al fisioterapeuta con su ID en la tabla de usuarios (AspNetUsers)
-            var fisio = await _userManager.FindByIdAsync(idSeleccionado);
-
-            if (fisio == null)
-            {
-                ModelState.AddModelError(string.Empty, "Fisioterapeuta no encontrado.");
-                return Page();
-            }
-
-            // Aquí puedes continuar con la lógica: crear la cita, validar, etc.
-            return RedirectToPage("Success"); // o la página que corresponda
-        }
-
     }
 }
