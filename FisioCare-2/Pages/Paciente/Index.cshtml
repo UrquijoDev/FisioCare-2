@@ -25,21 +25,29 @@
                     <i class="bi bi-calendar-check me-2"></i>Próxima cita
                 </div>
                 <div class="card-body">
-                    <h3 class="card-title">6 de Mayo 2024</h3>
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="bi bi-clock-history fs-5 text-secondary me-3"></i>
-                        <div>
-                            <p class="mb-0">3:00 PM - 4:00 PM</p>
-                            <small class="text-muted">Duración estimada: 1 hora</small>
+                    @if (Model.ProximaCita != null)
+                    {
+                        <h3 class="card-title">@Model.ProximaCita.HoraInicio.ToString("d 'de' MMMM yyyy")</h3>
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-clock-history fs-5 text-secondary me-3"></i>
+                            <div>
+                                <p class="mb-0">@Model.ProximaCita.HoraInicio.ToString("h:mm tt") - @Model.ProximaCita.HoraFin.ToString("h:mm tt")</p>
+                                <small class="text-muted">Duración estimada: @((Model.ProximaCita.HoraFin - Model.ProximaCita.HoraInicio).TotalMinutes) minutos</small>
+                            </div>
                         </div>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-person-badge fs-5 text-secondary me-3"></i>
-                        <div>
-                            <p class="mb-0">Dra. María Rodríguez</p>
-                            <small class="text-muted">Fisioterapia traumatológica</small>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-person-badge fs-5 text-secondary me-3"></i>
+                            <div>
+                                <p class="mb-0">@Model.ProximaCita.Fisioterapeuta.FirstName @Model.ProximaCita.Fisioterapeuta.LastName</p>
+                                <small class="text-muted">@Model.ProximaCita.Servicio.Nombre</small>
+                            </div>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No tienes citas próximas agendadas.</p>
+                    }
+
                 </div>
             </div>
         </div>
@@ -74,22 +82,18 @@
                                     <th>Motivo</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
-
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>15/04/2024</td>
-                                    <td>Dra. Rodríguez</td>
-                                    <td>Seguimiento postoperatorio</td>
-                                    <td><span class="badge bg-success">Completada</span></td>
-                                    <td>
-                                        <a class="btn btn-outline-primary btn-sm" href="/Admin/PaquetesCreditosConf/Edit?id=">Editar</a>
-                                        <a class="btn btn-outline-danger btn-sm" href="/Admin/PaquetesCreditosConf/Delete?id=">Eliminar</a>
-                                    </td>
-
-                                </tr>
-                                <!-- Puedes agregar más registros aquí -->
+                                @foreach (var cita in Model.HistorialCitas)
+                                {
+                                    <tr>
+                                        <td>@cita.HoraInicio.ToString("dd/MM/yyyy")</td>
+                                        <td>@cita.Fisioterapeuta.FirstName @cita.Fisioterapeuta.LastName</td>
+                                        <td>@cita.Servicio.Nombre</td>
+                                        <td><span class="badge bg-success">@cita.Estado</span></td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
