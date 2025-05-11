@@ -16,44 +16,43 @@
         <div class="step active"> <div class="step-number">4</div> <div class="step-label">Horario</div></div>
     </div>
 
-    <div class="time-selection">
-        <h2>Horarios disponibles para el día @Model.Fecha.ToString("dd/MM/yyyy")</h2>
-        <div class="time-buttons">
-            @if (Model.HorariosDisponibles != null && Model.HorariosDisponibles.Any())
-            {
-                foreach (var horario in Model.HorariosDisponibles)
+    <form method="post">
+        <div class="booking-form">
+            <h2>Horarios disponibles para el día @Model.Fecha.ToString("dd/MM/yyyy")</h2>
+            <div class="time-select">
+                @if (Model.HorariosDisponibles != null && Model.HorariosDisponibles.Any())
                 {
-                    <button class="btn btn-primary time-button" type="button" onclick="selectTime('@horario')">
-                        @horario
-                    </button>
+                    <select class="form-control" id="horario" name="HoraSeleccionada" required>
+                        <option value="" disabled selected>Selecciona un horario</option>
+                        @foreach (var horario in Model.HorariosDisponibles)
+                        {
+                            <option value="@horario">@horario</option>
+                        }
+                    </select>
                 }
-            }
-            else
-            {
-                <p>No hay horarios disponibles para la fecha seleccionada.</p>
-            }
+                else
+                {
+                    <p>No hay horarios disponibles para la fecha seleccionada.</p>
+                }
+            </div>
+
+            <div class="navigation-buttons">
+                <button type="submit" class="btn-primary">Siguiente</button>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 
-<script>
-    function selectTime(horario) {
-        alert(`Has seleccionado el horario: ${horario}`);
-        // Aquí puedes agregar lógica para enviar el horario seleccionado al servidor o almacenarlo temporalmente
-    }
-</script>
-
 <style>
-    .time-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
+    .time-select {
         margin-top: 20px;
     }
 
-    .time-button {
-        padding: 10px 20px;
+    .form-control {
+        width: 100%;
+        padding: 10px;
         font-size: 16px;
         border-radius: 5px;
+        border: 1px solid #ccc;
     }
 </style>

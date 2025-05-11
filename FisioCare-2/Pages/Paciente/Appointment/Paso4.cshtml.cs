@@ -18,6 +18,10 @@ namespace FisioCare_2.Pages.Paciente.Appointment
         {
             _context = context;
         }
+        // Add this property to the class
+        [BindProperty]
+        public TimeSpan HoraSeleccionada { get; set; }
+
 
         // Propiedades para almacenar los parámetros recibidos
         [BindProperty(SupportsGet = true)]
@@ -38,34 +42,87 @@ namespace FisioCare_2.Pages.Paciente.Appointment
             ServicioId = servicioId;
             Fecha = fecha;
 
-            // Obtener el día de la semana en español, en minúsculas
             string diaSemanax = fecha.ToString("dddd", new CultureInfo("es-ES")).ToLower();
 
-            // Convertir el ID entero del fisioterapeuta a string (si viene así desde la URL)
-            string fisioterapeutaIdStr = fisioterapeutaId.ToString();
-
-            // Buscar el horario correspondiente en la base de datos
-            Console.WriteLine("tiren paro we" + fisioterapeutaIdStr + diaSemanax);
-            
             var horario = _context.Horarios
                 .FirstOrDefault(h =>
-                    h.UsuarioId == fisioterapeutaIdStr && h.DiaSemana == diaSemanax);
+                    h.UsuarioId == fisioterapeutaId &&
+                    h.DiaSemana.ToLower() == diaSemanax);
 
-            // Validar si existe
             if (horario != null)
             {
                 TimeSpan horaInicioFisioterapeuta = horario.HoraInicio;
                 TimeSpan horaFinFisioterapeuta = horario.HoraFin;
 
-                Console.WriteLine(horaInicioFisioterapeuta); Console.WriteLine(horaFinFisioterapeuta);
+                // Obtener duración del servicio
+                var servicio = _context.Servicio.FirstOrDefault(s => s.Id == servicioId);
+                if (servicio == null)
+                {
+                    HorariosDisponibles = new(); // No hay servicio
+                    return;
+                }
 
+                TimeSpan duracionServicio = servicio.Duracion;
+
+                // Obtener citas existentes del fisioterapeuta para esa fecha
+                var citasExistentes = _context.Cita
+                    .Where(c =>
+                        c.FisioterapeutaId == fisioterapeutaId &&
+                        c.HoraInicio.Date == fecha.Date &&
+                        c.Estado != "Cancelada") // solo contar las activas
+                    .Include(c => c.Servicio) // importante para calcular la HoraFin
+                    .ToList();
+
+                // Generar bloques disponibles
+                var bloquesDisponibles = new List<TimeSpan>();
+                var horaActual = horaInicioFisioterapeuta;
+
+                while (horaActual + duracionServicio <= horaFinFisioterapeuta)
+                {
+                    var inicioPropuesto = fecha.Date + horaActual;
+                    var finPropuesto = inicioPropuesto + duracionServicio;
+
+                    bool enConflicto = citasExistentes.Any(c =>
+                        inicioPropuesto < (c.HoraInicio + c.Servicio.Duracion) &&
+                        finPropuesto > c.HoraInicio
+                    );
+
+                    if (!enConflicto)
+                    {
+                        bloquesDisponibles.Add(horaActual);
+                    }
+
+                    horaActual = horaActual.Add(TimeSpan.FromMinutes(30)); // Avanza en bloques
+                }
+
+                HorariosDisponibles = bloquesDisponibles;
             }
             else
             {
-                // El fisioterapeuta no trabaja ese día
-                HorariosDisponibles = new List<TimeSpan>(); // Vacío
-                Console.WriteLine("estoy nullxd");
+                HorariosDisponibles = new List<TimeSpan>();
             }
         }
+
+
+        public IActionResult OnPost()
+        {
+            // Asegúrate de que todos los datos estén presentes
+            if (string.IsNullOrEmpty(FisioterapeutaId) || ServicioId == 0 || Fecha == default || HoraSeleccionada == default)
+            {
+                // Manejar error, redirigir o mostrar mensaje
+                ModelState.AddModelError(string.Empty, "Faltan datos para confirmar la cita.");
+                return Page();
+            }
+
+            // Redirigir a la página Confirmacion con parámetros en la URL
+            return RedirectToPage("/Paciente/Appointment/Confirmacion", new
+            {
+                fisioterapeutaId = FisioterapeutaId,
+                servicioId = ServicioId,
+                fecha = Fecha.ToString("yyyy-MM-dd"),
+                hora = HoraSeleccionada.ToString()
+            });
+        }
+
     }
 }
