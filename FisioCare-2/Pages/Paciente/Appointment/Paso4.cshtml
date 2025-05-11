@@ -1,4 +1,59 @@
 ﻿@page
 @model FisioCare_2.Pages.Paciente.Appointment.Paso4Model
 @{
+    Layout = "_Layout";
 }
+<div class="container">
+    <header>
+        <h1>Clínica de Fisioterapia Salud Integral</h1>
+        <p class="subtitle">Selecciona el horario para tu cita</p>
+    </header>
+
+    <div class="booking-steps">
+        <div class="step"> <div class="step-number">1</div> <div class="step-label">Terapeuta</div></div>
+        <div class="step"> <div class="step-number">2</div> <div class="step-label">Servicio</div></div>
+        <div class="step"> <div class="step-number">3</div> <div class="step-label">Fecha</div></div>
+        <div class="step active"> <div class="step-number">4</div> <div class="step-label">Horario</div></div>
+    </div>
+
+    <div class="time-selection">
+        <h2>Horarios disponibles para el día @Model.Fecha.ToString("dd/MM/yyyy")</h2>
+        <div class="time-buttons">
+            @if (Model.HorariosDisponibles != null && Model.HorariosDisponibles.Any())
+            {
+                foreach (var horario in Model.HorariosDisponibles)
+                {
+                    <button class="btn btn-primary time-button" type="button" onclick="selectTime('@horario')">
+                        @horario
+                    </button>
+                }
+            }
+            else
+            {
+                <p>No hay horarios disponibles para la fecha seleccionada.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function selectTime(horario) {
+        alert(`Has seleccionado el horario: ${horario}`);
+        // Aquí puedes agregar lógica para enviar el horario seleccionado al servidor o almacenarlo temporalmente
+    }
+</script>
+
+<style>
+    .time-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .time-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+</style>
