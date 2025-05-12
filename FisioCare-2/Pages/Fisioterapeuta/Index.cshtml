@@ -1,0 +1,176 @@
+﻿@page
+@model FisioCare_2.Pages.Fisioterapeuta.IndexModel
+@{
+    Layout = "_Layout";
+}
+<main class="container-fluid p-4">
+    <!-- Encabezado -->
+    <div class="row mb-4">
+        <div class="col-12 col-md-8">
+            <p class="text-muted">Panel de gestión de citas</p>
+        </div>
+        <div class="col-12 col-md-4 d-flex align-items-center justify-content-end">
+            <span class="badge bg-info text-dark">
+                <i class="bi bi-calendar-event me-2"></i>Citas activas: @Model.CitasActivas.Count()
+            </span>
+        </div>
+    </div>
+
+    <!-- Sección de citas -->
+    <div class="row g-4">
+        <!-- Próximas citas -->
+        <div class="col-12 col-lg-6">
+            <div class="card border-primary rounded-4 shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <i class="bi bi-calendar-check me-2"></i>Próximas citas
+                </div>
+                <div class="card-body">
+                    @if (Model.CitasProximas != null && Model.CitasProximas.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var cita in Model.CitasProximas)
+                            {
+                                <li class="list-group-item">
+                                    <strong>@cita.Usuario.FirstName @cita.Usuario.LastName</strong><br />
+                                    <small class="text-muted">@cita.HoraInicio.ToString("dddd, dd MMM yyyy - hh:mm tt")</small><br />
+                                    <span class="text-muted">@cita.Servicio.Nombre</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No hay citas próximas.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de pacientes para reagendar -->
+        <div class="col-12 col-lg-6">
+            <div class="card border-info rounded-4 shadow-sm h-100">
+                <div class="card-header bg-info text-dark d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-people me-2"></i>Pacientes</span>
+                    <select class="form-select form-select-sm w-auto" id="filtroEstado" onchange="filtrarPacientes()">
+                        <option value="Todos">Todos</option>
+                        <option value="Activa">Activas</option>
+                        <option value="Cancelada">Canceladas</option>
+                        <option value="Completada">Completadas</option>
+                    </select>
+                </div>
+                <div class="card-body">
+                    <input type="text" id="busquedaPaciente" class="form-control mb-3" placeholder="Buscar por nombre..." onkeyup="filtrarPacientes()" />
+
+                    @if (Model.HistorialCitas != null && Model.HistorialCitas.Any())
+                    {
+                        var pacientesUnicos = Model.HistorialCitas
+                        .GroupBy(c => c.Usuario.Id)
+                        .Select(g => g.First())
+                        .ToList();
+
+                        <ul class="list-group" id="listaPacientes">
+                            @foreach (var cita in pacientesUnicos)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center paciente-item"
+                                    data-nombre="@($"{cita.Usuario.FirstName} {cita.Usuario.LastName}".ToLower())"
+                                    data-estado="@cita.Estado">
+                                    <div>
+                                        <strong>@cita.Usuario.FirstName @cita.Usuario.LastName</strong><br />
+                                        <small class="text-muted">Última cita: @cita.HoraInicio.ToString("dd/MM/yyyy - hh:mm tt")</small>
+                                    </div>
+                                    <a class="btn btn-outline-primary btn-sm" href="/Fisioterapeuta/Appointment/Paso1?idPaciente=@cita.Usuario.Id&idFisioterapeuta=@Model.IdFisioterapeuta">Reagendar</a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No hay pacientes registrados.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Historial de citas -->
+    <div class="row mt-4 g-4">
+        <div class="col-12">
+            <div class="card rounded-4 shadow-sm">
+                <div class="card-header bg-white">
+                    <i class="bi bi-clock-history me-2"></i>Historial de citas
+                </div>
+                <div class="card-body">
+                    @if (Model.HistorialCitas != null && Model.HistorialCitas.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
+                                        <th>Paciente</th>
+                                        <th>Servicio</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var cita in Model.HistorialCitas)
+                                    {
+                                        <tr>
+                                            <td>@cita.HoraInicio.ToString("dd/MM/yyyy")</td>
+                                            <td>@cita.HoraInicio.ToString("HH:mm")</td>
+                                            <td>@cita.Usuario.FirstName @cita.Usuario.LastName</td>
+                                            <td>@cita.Servicio.Nombre</td>
+                                            <td>
+                                                <span class="badge @(cita.Estado == "Cancelada" ? "bg-danger" : "bg-success")">
+                                                    @cita.Estado
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @if (cita.Estado != "Cancelada")
+                                                {
+                                                    <a class="btn btn-warning btn-sm" href="/Fisioterapeuta/Appointment/Edit?id=@cita.Id">Modificar</a>
+                                                    <a class="btn btn-danger btn-sm" href="/Fisioterapeuta/Appointment/Cancelar?id=@cita.Id">Cancelar</a>
+                                                    <a class="btn btn-success btn-sm" href="/Fisioterapeuta/Appointment/Cancelar?id=@cita.Id">Completada</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No hay historial disponible.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <script>
+        function filtrarPacientes() {
+            const input = document.getElementById("busquedaPaciente").value.toLowerCase();
+            const estadoFiltro = document.getElementById("filtroEstado").value;
+            const items = document.querySelectorAll(".paciente-item");
+
+            items.forEach(item => {
+                const nombre = item.dataset.nombre;
+                const estado = item.dataset.estado;
+
+                const coincideNombre = nombre.includes(input);
+                const coincideEstado = (estadoFiltro === "Todos" || estado === estadoFiltro);
+
+                if (coincideNombre && coincideEstado) {
+                    item.style.display = "flex";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        }
+    </script>
+}

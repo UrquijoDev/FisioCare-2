@@ -20,8 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Fisioterapeuta\" />
-    <Folder Include="Pages\Recepcionista\" />
+    <Folder Include="Pages\Recepcionista\Appointment\" />
     <Folder Include="wwwroot\img\users\" />
   </ItemGroup>
 
