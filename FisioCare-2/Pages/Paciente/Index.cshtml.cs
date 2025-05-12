@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using FisioCare_2.Models;
 using Microsoft.AspNetCore.Identity;
 using FisioCare_2.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FisioCare_2.Pages.Paciente
 {
+    [Authorize(Roles = "Paciente")]
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;

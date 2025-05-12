@@ -14,7 +14,24 @@
                     <p class="lead fw-normal text-white-50 mb-4">En nuestra clínica de fisioterapia, combinamos experiencia, tecnología y atención humana para ayudarte a recuperar tu salud y moverte con libertad.</p>
                     <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
                         <a class="btn btn-primary btn-lg px-4 me-sm-3" href="#features">Ver Servicios</a>
-                        <a class="btn btn-outline-light btn-lg px-4" href="#!">Agenda tu cita</a>
+                        @if (User.IsInRole("Recepcionista"))
+                        {
+                            <a class="btn btn-outline-light btn-lg px-4" href="Recepcionista/Appointment/paso1">Agenda tu cita</a>
+                        }
+                        else if (User.IsInRole("Paciente"))
+                        {
+                            <a class="btn btn-outline-light btn-lg px-4" href="Paciente/Appointment/paso1">Agenda tu cita</a>
+                        }
+                        else if (User.IsInRole("Fisioterapeuta"))
+                        {
+                            <a class="btn btn-outline-light btn-lg px-4" href="Fisioterapeuta/Appointment/paso1">Agenda tu cita</a>
+
+                        }
+                        else if (User.IsInRole("Admin"))
+                        {
+                            <a class="btn btn-outline-light btn-lg px-4" href="Paciente/Appointment/paso1">Agenda tu cita</a>
+
+                        }
                     </div>
                 </div>
             </div>
