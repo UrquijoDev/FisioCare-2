@@ -51,11 +51,13 @@
                 </div>
             </div>
         </div>
-
         <!-- Agendar nueva cita -->
         <div class="col-12 col-lg-6">
             <div class="card bg-light border-muted rounded-4 shadow-sm h-100">
                 <div class="card-body d-flex flex-column justify-content-center align-items-center text-center py-5">
+                        <div class="alert alert-primary rounded-pill px-4 py-2 d-inline-block shadow-sm">
+                            <strong>Créditos disponibles:</strong> @Model.CreditosDisponibles
+                        </div>
                     <i class="bi bi-plus-circle display-4 text-muted mb-4"></i>
                     <h3 class="mb-3">¿Necesitas una nueva cita?</h3>
                     <a asp-page="Appointment/Paso1" class="btn btn-success btn-lg w-75">Agendar ahora</a>
@@ -78,6 +80,7 @@
                             <thead>
                                 <tr>
                                     <th>Fecha</th>
+                                    <th>Hora</th>
                                     <th>Especialista</th>
                                     <th>Motivo</th>
                                     <th>Estado</th>
@@ -89,9 +92,28 @@
                                 {
                                     <tr>
                                         <td>@cita.HoraInicio.ToString("dd/MM/yyyy")</td>
+                                        <td>@cita.HoraInicio.ToString("HH:mm")</td>
                                         <td>@cita.Fisioterapeuta.FirstName @cita.Fisioterapeuta.LastName</td>
                                         <td>@cita.Servicio.Nombre</td>
-                                        <td><span class="badge bg-success">@cita.Estado</span></td>
+                                        <td>
+                                            @if(cita.Estado == "Cancelada")
+                                            {
+                                                <span class="badge bg-danger">@cita.Estado</span>
+
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">@cita.Estado</span>
+
+                                            }
+
+                                        </td>
+                                        <td>
+                                            @if(cita.Estado != "Cancelada"){
+                                                <a class="btn btn-warning btn-sm" href="/Paciente/Appointment/Edit?id=@(cita.Id)">Modificar</a>
+                                                <a class="btn btn-danger btn-sm" href="/Paciente/Appointment/Cancelar?id=@(cita.Id)">Cancelar</a>
+                                            }
+                                        </td>
                                     </tr>
                                 }
                             </tbody>

@@ -20,13 +20,14 @@ namespace FisioCare_2.Pages.Paciente
 
         public Cita? ProximaCita { get; set; }
         public List<Cita> HistorialCitas { get; set; } = new();
+        public int CreditosDisponibles { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
                 return RedirectToPage("/Account/Login");
-
+            CreditosDisponibles = user.CreditosDisponibles;
             // Obtener la próxima cita pendiente o confirmada, con el fisioterapeuta
             ProximaCita = await _context.Cita
                 .Include(c => c.Fisioterapeuta)  // Esto carga el objeto del fisioterapeuta completo
@@ -39,7 +40,7 @@ namespace FisioCare_2.Pages.Paciente
             HistorialCitas = await _context.Cita
                 .Include(c => c.Fisioterapeuta)  // Esto también incluye el fisioterapeuta
                 .Include(c => c.Servicio)
-                .Where(c => c.UsuarioId == user.Id && (c.Estado == "Completada" || c.Estado == "Confirmada" || c.Estado == "Pendiente"))
+                .Where(c => c.UsuarioId == user.Id && (c.Estado == "Completada" || c.Estado == "Confirmada" || c.Estado == "Pendiente" || c.Estado == "Cancelada"))
                 .OrderByDescending(c => c.HoraInicio)
                 .Take(5)
                 .ToListAsync();

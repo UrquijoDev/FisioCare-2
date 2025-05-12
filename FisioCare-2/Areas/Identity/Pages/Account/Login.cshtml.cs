@@ -120,26 +120,25 @@ namespace FisioCare_2.Areas.Identity.Pages.Account
                     var user = await _userManager.FindByEmailAsync(Input.Email);
                     var roles = await _userManager.GetRolesAsync(user);
 
-                    // Redirección por rol
-                    if (roles.Contains("Admin"))
+                    // Redirección por rol utilizando switch
+                    switch (roles.FirstOrDefault()) // Tomamos el primer rol de la lista, ya que solo es necesario uno
                     {
-                        return LocalRedirect("~/Admin/Index");
-                    }
-                    else if (roles.Contains("Fisioterapeuta"))
-                    {
-                        return LocalRedirect("~/Fisioterapeuta/Index");
-                    }
-                    else if (roles.Contains("Paciente"))
-                    {
-                        return LocalRedirect("~/Paciente/Index");
-                    }
-                    else if (roles.Contains("Recepcionista"))
-                    {
-                        return LocalRedirect("~/Recepcionista/Index");
-                    }
+                        case "Admin":
+                            return LocalRedirect("~/Admin/Index");
 
-                    // Si no tiene rol conocido, redirige al home por default
-                    return LocalRedirect("~/");
+                        case "Fisioterapeuta":
+                            return LocalRedirect("~/Fisioterapeuta/Index");
+
+                        case "Paciente":
+                            return LocalRedirect("~/Paciente/Index");
+
+                        case "Recepcionista":
+                            return LocalRedirect("~/Recepcionista/Index");
+
+                        default:
+                            // Si no tiene rol conocido, redirige al home por default
+                            return LocalRedirect("~/");
+                    }
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -159,6 +158,7 @@ namespace FisioCare_2.Areas.Identity.Pages.Account
 
             return Page();
         }
+
 
     }
 }

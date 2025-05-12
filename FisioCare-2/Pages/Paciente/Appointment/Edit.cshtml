@@ -1,0 +1,42 @@
+﻿@page
+@model FisioCare_2.Pages.Paciente.Appointment.EditModel
+@{
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="card shadow rounded-4 p-4">
+        <h2 class="mb-4 text-center">Editar Cita</h2>
+
+        <form method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="mb-3">
+                <label asp-for="Fecha" class="form-label">Fecha</label>
+                <input asp-for="Fecha" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="Fecha" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Hora" class="form-label">Hora</label>
+                <select asp-for="Hora" class="form-select">
+                    <option value="">Selecciona una hora</option>
+                    @foreach (var hora in Model.HorariosDisponibles)
+                    {
+                        <option value="@hora">@hora.ToString(@"hh\:mm")</option>
+                    }
+                </select>
+                <span asp-validation-for="Hora" class="text-danger"></span>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                <a asp-page="/Paciente/Index" class="btn btn-secondary ms-2">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
