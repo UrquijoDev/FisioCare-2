@@ -32,6 +32,7 @@ namespace FisioCare_2.Pages.Fisioterapeuta.Appointment
 
         // Propiedades para mostrar en vista
         public string NombreFisioterapeuta { get; set; } = string.Empty;
+        public string NombrePaciente { get; set; } = string.Empty;
         public string NombreServicio { get; set; } = string.Empty;
         public string FechaFormateada { get; set; } = string.Empty;
         public string HoraFormateada { get; set; } = string.Empty;
@@ -46,6 +47,7 @@ namespace FisioCare_2.Pages.Fisioterapeuta.Appointment
 
             var fisioterapeuta = await _context.Users.FindAsync(FisioterapeutaId);
             var servicio = await _context.Servicio.FindAsync(ServicioId);
+            var paciente = await _context.Users.FindAsync(idPaciente);
 
             if (fisioterapeuta == null || servicio == null)
             {
@@ -54,6 +56,7 @@ namespace FisioCare_2.Pages.Fisioterapeuta.Appointment
 
             NombreFisioterapeuta = $"{fisioterapeuta.FirstName} {fisioterapeuta.LastName}";
             NombreServicio = servicio.Nombre;
+            NombrePaciente = $"{paciente.FirstName} {paciente.LastName}";
 
             FechaFormateada = Fecha.ToString("dddd d 'de' MMMM 'de' yyyy", new CultureInfo("es-ES"));
             if (TimeSpan.TryParse(Hora, out TimeSpan horaParsed))
