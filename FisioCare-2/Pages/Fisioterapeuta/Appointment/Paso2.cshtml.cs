@@ -36,7 +36,7 @@ namespace FisioCare_2.Pages.Fisioterapeuta.Appointment
             {
                 fisioterapeutaId = FisioterapeutaId,
                 servicioId = ServicioId,
-                idPaciente = PacienteID,
+                pacienteID = PacienteID,
                 fecha = FechaSeleccionada.ToString("yyyy-MM-dd")
             });
         }

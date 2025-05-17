@@ -100,12 +100,14 @@ namespace FisioCare_2.Pages.Fisioterapeuta.Appointment
         public IActionResult OnPost()
         {
             // Asegúrate de que todos los datos estén presentes
-            if (string.IsNullOrEmpty(FisioterapeutaId) || ServicioId == 0 || Fecha == default || HoraSeleccionada == default)
+            if (string.IsNullOrEmpty(FisioterapeutaId) || ServicioId == 0 || Fecha == default || HoraSeleccionada == default )
             {
                 // Manejar error, redirigir o mostrar mensaje
                 ModelState.AddModelError(string.Empty, "Faltan datos para confirmar la cita.");
                 return Page();
             }
+
+            Console.WriteLine("XDDDDDDDDDDDDDDDDDDDDDDD" + PacienteID + "si no sale es que esta vacio xd");
 
             // Redirigir a la página Confirmacion con parámetros en la URL
             return RedirectToPage("/Fisioterapeuta/Appointment/Confirmacion", new
