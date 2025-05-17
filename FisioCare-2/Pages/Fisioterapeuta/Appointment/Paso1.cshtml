@@ -1,4 +1,68 @@
 ﻿@page
 @model FisioCare_2.Pages.Fisioterapeuta.Appointment.Paso1Model
 @{
+    Layout = "_Layout";
 }
+<div class="container">
+    <header>
+        <h1>Clínica de Fisioterapia Salud Integral</h1>
+        <p class="subtitle">Agenda tu cita de manera rápida y sencilla</p>
+    </header>
+
+    <div class="booking-steps">
+        <div class="step active" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-label">Servicio</div>
+        </div>
+        <div class="step" data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-label">Fecha y Hora</div>
+        </div>
+        <div class="step" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-label">Confirmación</div>
+        </div>
+    </div>
+
+    <div class="booking-form">
+        <div>
+            <h2>Selecciona el servicio que necesitas</h2>
+
+            <form method="get" action="/Fisioterapeuta/Appointment/Paso2">
+                <!-- Enviar datos necesarios como hidden inputs -->
+                <input type="hidden" name="fisioterapeutaId" value="@Model.FisioterapeutaId" />
+                <input type="hidden" name="pacienteId" value="@Model.PacienteID" />
+
+
+                <div class="form-group">
+                    <label for="service">Servicio de fisioterapia</label>
+                    <select id="service" name="servicioId" required>
+                        <option value="">-- Selecciona un servicio --</option>
+                        @foreach (var servicio in Model.Servicios)
+                        {
+                            <option value="@servicio.Id">@servicio.Nombre @servicio.CreditosNecesarios</option>
+                        }
+                    </select>
+                    <div class="error-message" id="service-error" style="display:none;">
+                        Por favor selecciona un servicio
+                    </div>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button type="submit" class="btn-primary">Siguiente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/cita.js"></script>
+<script>
+    document.querySelector("form").addEventListener("submit", function (e) {
+        const selected = document.getElementById("service").value;
+        if (!selected) {
+            document.getElementById("service-error").style.display = "block";
+            e.preventDefault();
+        }
+    });
+</script>
