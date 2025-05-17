@@ -1,4 +1,53 @@
 ﻿@page
 @model FisioCare_2.Pages.Fisioterapeuta.Appointment.Paso3Model
 @{
+    Layout = "_Layout";
 }
+
+<div class="container">
+    <header>
+        <h1>Clínica de Fisioterapia Salud Integral</h1>
+        <p class="subtitle">Agenda tu cita de manera rápida y sencilla</p>
+    </header>
+
+    <div class="booking-steps">
+        <div class="step" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-label">Servicio</div>
+        </div>
+        <div class="step " data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-label">Fecha y Hora</div>
+        </div>
+        <div class="step active" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-label">Confirmación</div>
+        </div>
+    </div>
+    <form method="post">
+        <div class="booking-form">
+            <h2>Horarios disponibles para el día @Model.Fecha.ToString("dd/MM/yyyy")</h2>
+            <div class="time-select">
+                @if (Model.HorariosDisponibles != null && Model.HorariosDisponibles.Any())
+                {
+                    <select class="form-control" id="horario" name="HoraSeleccionada" required>
+                        <option value="" disabled selected>Selecciona un horario</option>
+                        @foreach (var horario in Model.HorariosDisponibles)
+                        {
+                            <option value="@horario">@horario</option>
+                        }
+                    </select>
+                }
+                else
+                {
+                    <p>No hay horarios disponibles para la fecha seleccionada.</p>
+                }
+            </div>
+
+            <div class="navigation-buttons">
+                <button type="submit" class="btn-primary">Siguiente</button>
+            </div>
+        </div>
+    </form>
+</div>
+

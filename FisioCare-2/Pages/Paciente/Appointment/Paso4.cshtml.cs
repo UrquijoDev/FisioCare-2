@@ -18,7 +18,6 @@ namespace FisioCare_2.Pages.Paciente.Appointment
         {
             _context = context;
         }
-        // Add this property to the class
         [BindProperty]
         public TimeSpan HoraSeleccionada { get; set; }
 
