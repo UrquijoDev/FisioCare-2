@@ -1,4 +1,52 @@
 ﻿@page
 @model FisioCare_2.Pages.Fisioterapeuta.Appointment.Paso2Model
 @{
+    Layout = "_Layout";
 }
+
+<div class="container">
+    <header>
+        <h1>Clínica de Fisioterapia Salud Integral</h1>
+        <p class="subtitle">Agenda tu cita de manera rápida y sencilla</p>
+    </header>
+
+    <div class="booking-steps">
+        <div class="step" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-label">Servicio</div>
+        </div>
+        <div class="step active" data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-label">Fecha y Hora</div>
+        </div>
+        <div class="step" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-label">Confirmación</div>
+        </div>
+    </div>
+
+    <div class="booking-form">
+        <form method="post">
+            <input type="hidden" name="FisioterapeutaId" value="@Model.FisioterapeutaId" />
+            <input type="hidden" name="ServicioId" value="@Model.ServicioId" />
+            <input type="hidden" name="PacienteID" value="@Model.PacienteID" />
+
+            <div class="form-group">
+                <label for="FechaSeleccionada">Selecciona una fecha</label>
+                <input type="date" id="FechaSeleccionada" name="FechaSeleccionada" required />
+            </div>
+
+            <div class="navigation-buttons">
+                <button type="submit" class="btn-primary">Siguiente</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Bloquear fechas pasadas
+    document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("FechaSeleccionada").setAttribute("min", today);
+    });
+</script>
