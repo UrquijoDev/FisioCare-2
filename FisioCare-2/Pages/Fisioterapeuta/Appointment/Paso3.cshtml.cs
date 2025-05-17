@@ -107,7 +107,7 @@ namespace FisioCare_2.Pages.Fisioterapeuta.Appointment
                 return Page();
             }
 
-            Console.WriteLine("XDDDDDDDDDDDDDDDDDDDDDDD" + PacienteID + "si no sale es que esta vacio xd");
+            Console.WriteLine("Prueba" + PacienteID + "si no sale es que esta vacio xd");
 
             // Redirigir a la página Confirmacion con parámetros en la URL
             return RedirectToPage("/Fisioterapeuta/Appointment/Confirmacion", new

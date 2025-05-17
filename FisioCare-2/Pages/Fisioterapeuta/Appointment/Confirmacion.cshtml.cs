@@ -22,7 +22,7 @@ namespace FisioCare_2.Pages.Fisioterapeuta.Appointment
         [BindProperty(SupportsGet = true)]
         public string FisioterapeutaId { get; set; } = string.Empty;
         [BindProperty(SupportsGet = true)]
-        public string PacienteID { get; set; } = string.Empty;
+        public string idPaciente { get; set; } = string.Empty;
         [BindProperty(SupportsGet = true)]
         public int ServicioId { get; set; }
         [BindProperty(SupportsGet = true)]
@@ -60,9 +60,70 @@ namespace FisioCare_2.Pages.Fisioterapeuta.Appointment
             {
                 HoraFormateada = DateTime.Today.Add(horaParsed).ToString("hh:mm tt", new CultureInfo("es-ES"));
             }
-
             return Page();
         }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            // Validaciones básicas
+            if (string.IsNullOrEmpty(FisioterapeutaId) || string.IsNullOrEmpty(idPaciente) || ServicioId == 0 || Fecha == default || string.IsNullOrEmpty(Hora))
+            {
+                return RedirectToPage("/Error");
+            }
+
+            // Obtener el paciente usando el ID recibido
+            var paciente = await _context.Users.FindAsync(idPaciente);
+            if (paciente == null)
+            {
+                return RedirectToPage("/Error");
+            }
+
+            // Obtener el servicio
+            var servicio = await _context.Servicio.FindAsync(ServicioId);
+            if (servicio == null)
+            {
+                return RedirectToPage("/Error");
+            }
+
+            // Validar créditos suficientes
+            if (paciente.CreditosDisponibles < servicio.CreditosNecesarios)
+            {
+                TempData["Error"] = "El paciente no tiene créditos suficientes para agendar esta cita.";
+                return RedirectToPage("/Fisioterapeuta/Index");
+            }
+
+            // Convertir hora string a TimeSpan y combinar con fecha
+            if (!TimeSpan.TryParse(Hora, out TimeSpan horaParsed))
+            {
+                TempData["Error"] = "La hora seleccionada no es válida.";
+                return RedirectToPage("/Error");
+            }
+
+            DateTime horaInicio = Fecha.Date.Add(horaParsed);
+
+            // Crear la cita
+            var nuevaCita = new Cita
+            {
+                UsuarioId = paciente.Id,
+                FisioterapeutaId = FisioterapeutaId,
+                ServicioId = ServicioId,
+                HoraInicio = horaInicio,
+                Estado = "Pendiente",
+                CreatedAt = DateTime.Now
+            };
+
+            _context.Cita.Add(nuevaCita);
+
+            // Descontar créditos del paciente
+            paciente.CreditosDisponibles -= servicio.CreditosNecesarios;
+            _context.Users.Update(paciente);
+
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "¡Cita agendada exitosamente!";
+            return RedirectToPage("/Fisioterapeuta/Index");
+        }
+
 
 
     }
