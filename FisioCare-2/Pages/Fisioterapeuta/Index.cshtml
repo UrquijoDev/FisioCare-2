@@ -30,12 +30,20 @@
                         <ul class="list-group list-group-flush">
                             @foreach (var cita in Model.CitasProximas)
                             {
-                                <li class="list-group-item">
-                                    <strong>@cita.Usuario.FirstName @cita.Usuario.LastName</strong><br />
-                                    <small class="text-muted">@cita.HoraInicio.ToString("dddd, dd MMM yyyy - hh:mm tt")</small><br />
-                                    <span class="text-muted">@cita.Servicio.Nombre</span>
+                                <li class="list-group-item d-flex justify-content-between align-items-start flex-wrap">
+                                    <div>
+                                        <strong>@cita.Usuario.FirstName @cita.Usuario.LastName</strong><br />
+                                        <small class="text-muted">@cita.HoraInicio.ToString("dddd, dd MMM yyyy - hh:mm tt")</small><br />
+                                        <span class="text-muted">@cita.Servicio.Nombre</span>
+                                    </div>
+                                    <div class="mt-2 mt-md-0">
+                                        <a class="btn btn-sm btn-success me-1" href="/Fisioterapeuta/Appointment/Completada?id=@cita.Id">Completar</a>
+                                        <a class="btn btn-sm btn-danger" href="/Fisioterapeuta/Appointment/Cancelar?id=@cita.Id">Cancelar</a>
+                                        <a class="btn btn-warning btn-sm" href="/Fisioterapeuta/Appointment/Edit?id=@cita.Id">Modificar</a>
+                                    </div>
                                 </li>
                             }
+
                         </ul>
                     }
                     else
@@ -77,6 +85,7 @@
                                     <div>
                                         <strong>@cita.Usuario.FirstName @cita.Usuario.LastName</strong><br />
                                         <small class="text-muted">Última cita: @cita.HoraInicio.ToString("dd/MM/yyyy - hh:mm tt")</small>
+                                        <small class="text-muted">Creditos: @cita.Usuario.CreditosDisponibles</small>
                                     </div>
                                     <a class="btn btn-outline-primary btn-sm" href="/Fisioterapeuta/Appointment/Paso1?idPaciente=@cita.Usuario.Id&idFisioterapeuta=@Model.IdFisioterapeuta">Reagendar</a>
                                 </li>
@@ -91,18 +100,27 @@
             </div>
         </div>
     </div>
-
     <!-- Historial de citas -->
     <div class="row mt-4 g-4">
         <div class="col-12">
             <div class="card rounded-4 shadow-sm">
-                <div class="card-header bg-white">
-                    <i class="bi bi-clock-history me-2"></i>Historial de citas
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="bi bi-clock-history me-2"></i>Historial de citas
+                    </div>
+                    <div class="w-auto">
+                        <select class="form-select form-select-sm" id="filtroHistorial" onchange="filtrarHistorial()">
+                            <option value="Todos">Todos</option>
+                            <option value="Completada">Completadas</option>
+                            <option value="Cancelada">Canceladas</option>
+                            <option value="Pendiente">Pendientes</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="card-body">
                     @if (Model.HistorialCitas != null && Model.HistorialCitas.Any())
                     {
-                        <div class="table-responsive">
+                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
                             <table class="table table-hover align-middle">
                                 <thead>
                                     <tr>
@@ -117,22 +135,24 @@
                                 <tbody>
                                     @foreach (var cita in Model.HistorialCitas)
                                     {
-                                        <tr>
+                                        <tr data-estado="@cita.Estado">
                                             <td>@cita.HoraInicio.ToString("dd/MM/yyyy")</td>
                                             <td>@cita.HoraInicio.ToString("HH:mm")</td>
                                             <td>@cita.Usuario.FirstName @cita.Usuario.LastName</td>
                                             <td>@cita.Servicio.Nombre</td>
                                             <td>
-                                                <span class="badge @(cita.Estado == "Cancelada" ? "bg-danger" : "bg-success")">
+                                                <span class="badge @(cita.Estado == "Cancelada" ? "bg-danger" :
+                                                                 cita.Estado == "Completada" ? "bg-success" :
+                                                                 "bg-warning text-dark")">
                                                     @cita.Estado
                                                 </span>
                                             </td>
                                             <td>
-                                                @if (cita.Estado != "Cancelada")
+                                                @if (cita.Estado == "Pendiente")
                                                 {
                                                     <a class="btn btn-warning btn-sm" href="/Fisioterapeuta/Appointment/Edit?id=@cita.Id">Modificar</a>
                                                     <a class="btn btn-danger btn-sm" href="/Fisioterapeuta/Appointment/Cancelar?id=@cita.Id">Cancelar</a>
-                                                    <a class="btn btn-success btn-sm" href="/Fisioterapeuta/Appointment/Cancelar?id=@cita.Id">Completada</a>
+                                                    <a class="btn btn-success btn-sm" href="/Fisioterapeuta/Appointment/Completada?id=@cita.Id">Completada</a>
                                                 }
                                             </td>
                                         </tr>
@@ -173,4 +193,22 @@
             });
         }
     </script>
+
+    <script>
+        function filtrarHistorial() {
+            const filtro = document.getElementById("filtroHistorial").value;
+            const filas = document.querySelectorAll("tbody tr");
+
+            filas.forEach(fila => {
+                const estado = fila.getAttribute("data-estado");
+
+                if (filtro === "Todos" || estado === filtro) {
+                    fila.style.display = "";
+                } else {
+                    fila.style.display = "none";
+                }
+            });
+        }
+    </script>
+
 }

@@ -109,7 +109,8 @@
 
                                         </td>
                                         <td>
-                                            @if(cita.Estado != "Cancelada"){
+                                            @if (cita.Estado == "Pendiente")
+                                            {
                                                 <a class="btn btn-warning btn-sm" href="/Paciente/Appointment/Edit?id=@(cita.Id)">Modificar</a>
                                                 <a class="btn btn-danger btn-sm" href="/Paciente/Appointment/Cancelar?id=@(cita.Id)">Cancelar</a>
                                             }
