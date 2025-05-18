@@ -4,6 +4,7 @@
     Layout = "_Layout";
 }
 <main class="container-fluid p-4">
+    
     <!-- Encabezado -->
     <div class="row mb-4">
         <div class="col-12 col-md-8">
@@ -15,7 +16,30 @@
             </span>
         </div>
     </div>
-
+    @if (TempData["Success-Cita-Fisioterapeuta"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            @TempData["Success-Cita-Fisioterapeuta"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    }
+    @if (TempData["Error-Creditos-Fisioterapeuta"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            @TempData["Error-Creditos-Fisioterapeuta"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    }
+    @if (TempData["Error-Hora-Fisioterapeuta"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <i class="bi bi-clock-fill me-2"></i>
+            @TempData["Error-Hora-Fisioterapeuta"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    }
     <!-- Sección de citas -->
     <div class="row g-4">
         <!-- Próximas citas -->
@@ -27,6 +51,7 @@
                 <div class="card-body">
                     @if (Model.CitasProximas != null && Model.CitasProximas.Any())
                     {
+                        <div style="max-height: 200px; overflow-y: auto;">
                         <ul class="list-group list-group-flush">
                             @foreach (var cita in Model.CitasProximas)
                             {
@@ -45,6 +70,7 @@
                             }
 
                         </ul>
+                        </div>
                     }
                     else
                     {
@@ -63,13 +89,13 @@
                 <div class="card-body">
                     <input type="text" id="busquedaPaciente" class="form-control mb-3" placeholder="Buscar por nombre..." onkeyup="filtrarPacientes()" />
 
-                    @if (Model.HistorialCitas != null && Model.HistorialCitas.Any())
+                    @if (Model.HistorialCitas != null && Model.HistorialCitas.Any() || Model.todasLasCitas.Any())
                     {
-                        var pacientesUnicos = Model.HistorialCitas
+                        var pacientesUnicos = Model.todasLasCitas
                         .GroupBy(c => c.Usuario.Id)
                         .Select(g => g.First())
                         .ToList();
-
+                        <div style="max-height: 200px; overflow-y: auto;">
                         <ul class="list-group" id="listaPacientes">
                             @foreach (var cita in pacientesUnicos)
                             {
@@ -86,6 +112,7 @@
                                 </li>
                             }
                         </ul>
+                        </div>
                     }
                     else
                     {
@@ -115,7 +142,7 @@
                 <div class="card-body">
                     @if (Model.HistorialCitas != null && Model.HistorialCitas.Any())
                     {
-                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                        <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
                             <table class="table table-hover align-middle">
                                 <thead>
                                     <tr>
@@ -165,52 +192,5 @@
         </div>
     </div>
 </main>
-
-@section Scripts {
-    <script>
-                                                 function filtrarPacientes() {
-            const input = document.getElementById("busquedaPaciente").value.toLowerCase();
-            const items = document.querySelectorAll(".paciente-item");
-
-            console.log("🔍 Valor de búsqueda:", input);
-            console.log("📋 Elementos encontrados:", items.length);
-
-            items.forEach(item => {
-                const nombre = item.dataset.nombre;
-                const correo = item.dataset.correo;
-
-                const coincideBusqueda = nombre.includes(input) || correo.includes(input);
-
-                console.log("👤 Paciente:", nombre);
-                console.log("✉️ Correo:", correo);
-                console.log("✅ Coincide con búsqueda:", coincideBusqueda);
-
-                        if (coincideBusqueda) {
-            item.style.setProperty("display", "flex", "important");
-            console.log("✅ MOSTRAR", item.dataset.nombre);
-        } else {
-            item.style.setProperty("display", "none", "important");
-            console.log("❌ OCULTAR", item.dataset.nombre);
-        }
-            });
-        }
-
-
-
-        function filtrarHistorial() {
-            const filtro = document.getElementById("filtroHistorial").value;
-            const filas = document.querySelectorAll("tbody tr");
-
-            filas.forEach(fila => {
-                const estado = fila.getAttribute("data-estado");
-
-                if (filtro === "Todos" || estado === filtro) {
-                    fila.style.display = "";
-                } else {
-                    fila.style.display = "none";
-                }
-            });
-        }
-    </script>
-
-}
+<script src="~/js/Fisioterapeuta/Fisioterapeuta-Filtros.js"></script>
+<script src="~/js/Fisioterapeuta/Fisioterapeuta-Notificaciones-CitaAgendada.js"></script>

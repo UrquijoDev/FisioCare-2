@@ -4,11 +4,11 @@
     Layout = "_LayoutAdmin";
 }
 <!-- Mensajes de éxito o error -->
-@if (TempData["Error"] != null)
+@if (TempData["Error-creditos"] != null)
 {
     <div class="alert alert-danger">@TempData["Error"]</div>
 }
-else if (TempData["Success"] != null)
+else if (TempData["Success-creditos"] != null)
 {
     <div class="alert alert-success">@TempData["Success"]</div>
 }
@@ -53,28 +53,4 @@ else if (TempData["Success"] != null)
         </div>
     </div>
 </section>
-
-<script>
-    const datalistOptions = [...document.querySelectorAll("#PacientesList option")];
-
-    document.getElementById("PacienteSearch").addEventListener("input", function () {
-        const input = this.value.toLowerCase();
-        const match = datalistOptions.find(option => option.value.toLowerCase() === input);
-
-        if (match) {
-            document.getElementById("PacienteId").value = match.getAttribute("data-id");
-            document.getElementById("PacienteError").classList.add("d-none");
-        } else {
-            document.getElementById("PacienteId").value = "";
-        }
-    });
-
-    function validarPaciente() {
-        const pacienteId = document.getElementById("PacienteId").value;
-        if (!pacienteId) {
-            document.getElementById("PacienteError").classList.remove("d-none");
-            return false;
-        }
-        return true;
-    }
-</script>
+<script src="~/js/Admin/Administrador-Filtro-Creditos.js"></script>

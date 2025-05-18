@@ -24,6 +24,7 @@ namespace FisioCare_2.Pages.Fisioterapeuta
         public List<Cita> HistorialCitas { get; set; } = new();
         public List<Cita> CitasActivas { get; set; } = new();
         public List<Cita> CitasProximas { get; set; } = new();
+        public List<Cita> todasLasCitas { get; set; } = new();
         public string IdFisioterapeuta { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -64,7 +65,12 @@ namespace FisioCare_2.Pages.Fisioterapeuta
                 .OrderByDescending(c => c.HoraInicio)
                 .Take(5)
                 .ToListAsync();
-
+            // Lista completa de citas para pacientes únicos
+             todasLasCitas = await _context.Cita
+                .Include(c => c.Usuario)
+                .Include(c => c.Servicio)
+                .Where(c => c.FisioterapeutaId == user.Id)
+                .ToListAsync();
             return Page();
         }
     }

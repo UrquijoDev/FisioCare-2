@@ -22,6 +22,8 @@
   <ItemGroup>
     <Folder Include="Pages\Recepcionista\Appointment\" />
     <Folder Include="wwwroot\img\users\" />
+    <Folder Include="wwwroot\js\Recepcionista\" />
+    <Folder Include="wwwroot\js\Paciente\" />
   </ItemGroup>
 
 </Project>

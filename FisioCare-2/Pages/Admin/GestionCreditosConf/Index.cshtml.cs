@@ -47,7 +47,7 @@ namespace FisioCare_2.Pages.Admin.GestionCreditosConf
         {
             if (string.IsNullOrEmpty(pacienteId) || paqueteId == 0)
             {
-                TempData["Error"] = "Debe seleccionar un paciente y un paquete de créditos.";
+                TempData["Error-creditos"] = "Debe seleccionar un paciente y un paquete de créditos.";
                 return RedirectToPage();
             }
 
@@ -56,7 +56,7 @@ namespace FisioCare_2.Pages.Admin.GestionCreditosConf
 
             if (paciente == null || paquete == null)
             {
-                TempData["Error"] = "Paciente o paquete no encontrado.";
+                TempData["Error-paciente"] = "Paciente o paquete no encontrado.";
                 return RedirectToPage();
             }
 
@@ -74,7 +74,7 @@ namespace FisioCare_2.Pages.Admin.GestionCreditosConf
             _context.TransaccionCredito.Add(transaccion);
             await _context.SaveChangesAsync();
 
-            TempData["Success"] = "Créditos asignados correctamente al paciente.";
+            TempData["Success-creditos"] = "Créditos asignados correctamente al paciente.";
             return RedirectToPage();
         }
     }

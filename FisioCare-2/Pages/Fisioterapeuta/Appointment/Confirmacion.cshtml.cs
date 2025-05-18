@@ -91,14 +91,14 @@ namespace FisioCare_2.Pages.Fisioterapeuta.Appointment
             // Validar créditos suficientes
             if (paciente.CreditosDisponibles < servicio.CreditosNecesarios)
             {
-                TempData["Error"] = "El paciente no tiene créditos suficientes para agendar esta cita.";
+                TempData["Error-Creditos-Fisioterapeuta"] = "El paciente no tiene créditos suficientes para agendar esta cita.";
                 return RedirectToPage("/Fisioterapeuta/Index");
             }
 
             // Convertir hora string a TimeSpan y combinar con fecha
             if (!TimeSpan.TryParse(Hora, out TimeSpan horaParsed))
             {
-                TempData["Error"] = "La hora seleccionada no es válida.";
+                TempData["Error-Hora-Fisioterapeuta"] = "La hora seleccionada no es válida.";
                 return RedirectToPage("/Error");
             }
 
@@ -123,7 +123,7 @@ namespace FisioCare_2.Pages.Fisioterapeuta.Appointment
 
             await _context.SaveChangesAsync();
 
-            TempData["Success"] = "¡Cita agendada exitosamente!";
+            TempData["Success-Cita-Fisioterapeuta"] = "¡Cita agendada exitosamente!";
             return RedirectToPage("/Fisioterapeuta/Index");
         }
 
