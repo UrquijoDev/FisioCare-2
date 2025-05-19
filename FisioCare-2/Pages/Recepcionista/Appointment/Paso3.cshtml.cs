@@ -6,7 +6,7 @@ namespace FisioCare_2.Pages.Recepcionista.Appointment
     public class Paso3Model : PageModel
     {
         [BindProperty(SupportsGet = true)]
-        public string FisioterapeutaId { get; set; } = string.Empty;
+        public string idFisioterapeuta { get; set; } = string.Empty;
         [BindProperty(SupportsGet = true)]
         public string IDPaciente { get; set; } = string.Empty;
 
@@ -17,7 +17,7 @@ namespace FisioCare_2.Pages.Recepcionista.Appointment
         public DateTime FechaSeleccionada { get; set; }
         public void OnGet()
         {
-            Console.WriteLine("OnGet called " + FisioterapeutaId + IDPaciente + ServicioId );
+            Console.WriteLine("OnGet called Fisio" + idFisioterapeuta + "Paciente"+ IDPaciente + "Servicio"+ServicioId );
         }
 
         public IActionResult OnPost()
@@ -27,7 +27,8 @@ namespace FisioCare_2.Pages.Recepcionista.Appointment
 
             return RedirectToPage("Paso4", new
             {
-                fisioterapeutaId = FisioterapeutaId,
+                IDPaciente,
+                idFisioterapeuta,
                 servicioId = ServicioId,
                 fecha = FechaSeleccionada.ToString("yyyy-MM-dd")
             });
