@@ -93,7 +93,7 @@ namespace FisioCare_2.Pages.Paciente.Appointment
             // Validar créditos suficientes
             if (user.CreditosDisponibles < servicio.CreditosNecesarios)
             {
-                TempData["Error"] = "No tienes créditos suficientes para agendar esta cita.";
+                TempData["Error-Cita-Creditos-Paciente"] = "No tienes créditos suficientes para agendar esta cita.";
                 return RedirectToPage("/Paciente/Index"); // O volver a la página anterior
             }
 
@@ -125,7 +125,7 @@ namespace FisioCare_2.Pages.Paciente.Appointment
 
             await _context.SaveChangesAsync();
 
-            TempData["Success"] = "¡Cita agendada exitosamente!";
+            TempData["Success-Cita-Paciente"] = "¡Cita agendada exitosamente!";
             return RedirectToPage("/Paciente/Index");
         }
     }

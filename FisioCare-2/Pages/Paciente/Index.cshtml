@@ -15,6 +15,22 @@
             </span>
         </div>
     </div>
+    @if (TempData["Success-Cita-Paciente"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            @TempData["Success-Cita-Paciente"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    }
+    @if (TempData["Error-Cita-Creditos-Paciente"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            @TempData["Error-Cita-Creditos-Paciente"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    }
 
     <!-- Sección de citas -->
     <div class="row g-4">
@@ -74,8 +90,16 @@
                 <div class="card-header bg-white">
                     <i class="bi bi-clock-history me-2"></i>Últimas consultas
                 </div>
+                <div class="w-auto">
+                    <select class="form-select form-select-sm" id="filtroHistorial" onchange="filtrarHistorial()">
+                        <option value="Todos">Todos</option>
+                        <option value="Completada">Completadas</option>
+                        <option value="Cancelada">Canceladas</option>
+                        <option value="Pendiente">Pendientes</option>
+                    </select>
+                </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <div class="table-responsive" style="max-height: 180px; overflow-y: auto; overflow-x: auto;">
                         <table class="table table-hover align-middle">
                             <thead>
                                 <tr>
@@ -90,7 +114,7 @@
                             <tbody>
                                 @foreach (var cita in Model.HistorialCitas)
                                 {
-                                    <tr>
+                                    <tr data-estado="@cita.Estado">
                                         <td>@cita.HoraInicio.ToString("dd/MM/yyyy")</td>
                                         <td>@cita.HoraInicio.ToString("HH:mm")</td>
                                         <td>@cita.Fisioterapeuta.FirstName @cita.Fisioterapeuta.LastName</td>
@@ -144,3 +168,4 @@
         </div>
     </div>
 </main>
+<script src="~/js/Fisioterapeuta/Fisioterapeuta-Filtros.js"></script>
