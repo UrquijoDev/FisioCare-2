@@ -1,0 +1,46 @@
+﻿@page
+@model FisioCare_2.Pages.Recepcionista.GestionCreditosModel
+@{
+    Layout = "_Layout";
+}
+
+
+<section class="projects-section card">
+    <div class="card-header">
+        <h2>Gestión de Créditos</h2>
+        <p class="subtitle">Seleccione un paciente y un paquete de créditos para asignar</p>
+    </div>
+    <div class="row mb-4">
+        <div class="col">
+
+            <!-- Mensajes de éxito o error -->
+            @if (TempData["Error-creditos"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Error-creditos"]</div>
+            }
+            else if (TempData["Success-creditos"] != null)
+            {
+                <div class="alert alert-success">@TempData["Success-creditos"]</div>
+            }
+            <h4>Asignar Créditos a un Paciente</h4>
+            <form method="post" asp-page-handler="AsignarCreditos" onsubmit="return validarPaciente();">
+                <input type="hidden" name="idPaciente" value="@Model.idPaciente" />
+                <div class="form-group">
+                    <label for="PaqueteId">Seleccionar Paquete de Créditos</label>
+                    <select class="form-control" id="PaqueteId" name="paqueteId" required>
+                        <option value="">Seleccione un paquete</option>
+                        @foreach (var paquete in Model.PaquetesCredito)
+                        {
+                            <option value="@paquete.Id">@paquete.Nombre - @paquete.CantidadCreditos Créditos</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success mt-3">Asignar Créditos</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<script src="~/js/Admin/Administrador-Filtro-Creditos.js"></script>

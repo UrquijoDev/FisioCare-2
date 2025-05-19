@@ -27,7 +27,7 @@
                         <!-- Condicional para el botón de cuenta según el rol -->
                         @if (User.IsInRole("Recepcionista"))
                         {
-                            <li class="nav-item"><a class="nav-link" asp-area="" asp-page="/Admin/Index">Inicio</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-page="/Recepcionista/Index">Inicio</a></li>
                         }
                         else if (User.IsInRole("Fisioterapeuta"))
                         {
