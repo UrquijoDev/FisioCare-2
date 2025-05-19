@@ -1,5 +1,5 @@
 ﻿@page
-@model FisioCare_2.Pages.Paciente.Appointment.Paso1Model
+@model FisioCare_2.Pages.Recepcionista.Appointment.Paso1Model
 @{
     Layout = "_Layout";
 }
@@ -33,7 +33,7 @@
         <div>
             <h2>Selecciona tu fisioterapeuta</h2>
 
-            <select asp-for="FisioterapeutaId" class="select-therapist" id="therapist-select">
+            <select asp-for="idFisioterapeuta" class="select-therapist" id="therapist-select">
                 <option value="">Seleccione un fisioterapeuta</option>
                 @foreach (var fisio in Model.Fisioterapeutas)
                 {
@@ -58,7 +58,8 @@
                 <button class="btn-secondary btn-disabled" disabled>Anterior</button>
 
                 <form method="get" asp-page="Paso2" onsubmit="return validateTherapistSelection()" style="display: inline;">
-                    <input type="hidden" name="FisioterapeutaId" id="selectedTherapistId" />
+                    <input type="hidden" name="IDPaciente" id="hiddenIDPaciente" value="@Model.IDPaciente" />
+                    <input type="hidden" name="idFisioterapeuta" id="selectedTherapistId" />
                     <button type="submit" class="btn-primary">Siguiente</button>
                 </form>
             </div>

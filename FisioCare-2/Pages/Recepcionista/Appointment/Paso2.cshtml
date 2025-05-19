@@ -1,5 +1,5 @@
 ﻿@page
-@model FisioCare_2.Pages.Paciente.Appointment.Paso2Model
+@model FisioCare_2.Pages.Recepcionista.Appointment.Paso2Model
 @{
     Layout = "_Layout";
 }
@@ -35,8 +35,8 @@
 
             <form method="get">
                 <!-- OJO: el name es en minúscula -->
-                <input type="hidden" name="fisioterapeutaId" value="@Model.FisioterapeutaId" />
-
+                <input type="hidden" name="idFisioterapeuta" value="@Model.idFisioterapeuta" />
+                <input type="hidden" name="IDPaciente" value="@Model.IDPaciente" />
                 <div class="form-group">
                     <label for="service">Servicio de fisioterapia</label>
                     <select id="service" name="servicioId" required>
@@ -51,7 +51,7 @@
 
                 <div class="navigation-buttons">
                     <!-- El formulario ya pasa la información con el asp-page y parámetros -->
-                    <button type="submit" class="btn-primary" asp-page="Paso3" asp-route-fisioterapeutaId="@Model.FisioterapeutaId" asp-route-servicioId="@Request.Query["servicioId"]">Siguiente</button>
+                    <button type="submit" class="btn-primary" asp-page="Paso3" asp-route-IDPaciente="@Model.IDPaciente" asp-route-idFisioterapeuta="@Model.idFisioterapeuta" asp-route-servicioId="@Request.Query["servicioId"]">Siguiente</button>
                 </div>
             </form>
         </div>
