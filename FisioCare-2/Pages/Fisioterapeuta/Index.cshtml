@@ -100,7 +100,8 @@
                                 @foreach (var cita in pacientesUnicos)
                                 {
                                     <li class="list-group-item d-flex justify-content-between align-items-center paciente-item"
-                                        data-nombre="@($"{cita.Usuario.FirstName} {cita.Usuario.LastName}".ToLower())">
+                                        data-nombre="@($"{cita.Usuario.FirstName} {cita.Usuario.LastName}".ToLower())"
+                                        data-correo="@cita.Usuario.Email.ToLower()">
                                         <div>
                                             <strong>@cita.Usuario.FirstName @cita.Usuario.LastName</strong> <br />
                                             <small class="text-muted">Última cita: @cita.HoraInicio.ToString("dd/MM/yyyy - hh:mm tt")</small><br />
