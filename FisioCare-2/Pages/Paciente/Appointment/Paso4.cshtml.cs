@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using FisioCare_2.Services;
+using System.Security.AccessControl;
 
 namespace FisioCare_2.Pages.Paciente.Appointment
 {
@@ -50,6 +51,7 @@ namespace FisioCare_2.Pages.Paciente.Appointment
 
             if (horario != null)
             {
+                Console.WriteLine(FisioterapeutaId);
                 TimeSpan horaInicioFisioterapeuta = horario.HoraInicio;
                 TimeSpan horaFinFisioterapeuta = horario.HoraFin;
 

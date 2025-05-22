@@ -49,11 +49,36 @@ namespace FisioCare_2.Pages.Admin.UsuariosT
             }
 
             Usuario = usuario;
-            Horarios = usuario.Horarios?.ToList() ?? new List<Horario>();
             ExistingImage = usuario.ImageFileName ?? "";
+
+            // Días de la semana de lunes a viernes
+            var diasSemana = new List<string> { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes" };
+
+            // Si ya tiene horarios, los usamos, pero aseguramos que estén todos los días de lunes a viernes
+            var horariosExistentes = usuario.Horarios?.ToList() ?? new List<Horario>();
+            Horarios = new List<Horario>();
+
+            foreach (var dia in diasSemana)
+            {
+                var horarioExistente = horariosExistentes.FirstOrDefault(h => h.DiaSemana == dia);
+                if (horarioExistente != null)
+                {
+                    Horarios.Add(horarioExistente);
+                }
+                else
+                {
+                    Horarios.Add(new Horario
+                    {
+                        DiaSemana = dia,
+                        HoraInicio = TimeSpan.Zero,
+                        HoraFin = TimeSpan.Zero
+                    });
+                }
+            }
 
             return Page();
         }
+
 
         public IActionResult OnPost(string id)
         {

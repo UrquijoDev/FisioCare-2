@@ -71,6 +71,7 @@
                         <div class="mb-2">
                             <label>@Model.Horarios[i].DiaSemana</label>
                             <div class="input-group">
+                                <input type="hidden" asp-for="Horarios[@i].DiaSemana" />
                                 <input class="form-control" asp-for="Horarios[@i].HoraInicio" type="time" />
                                 <input class="form-control" asp-for="Horarios[@i].HoraFin" type="time" />
                             </div>

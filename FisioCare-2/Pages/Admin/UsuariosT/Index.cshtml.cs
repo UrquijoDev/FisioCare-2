@@ -25,18 +25,26 @@ namespace FisioCare_2.Pages.Admin.UsuariosT
         public ICollection<Horario> Horarios { get; set; }
         public async Task OnGetAsync()
         {
-            // Cargar los usuarios y sus horarios
-            Usuarios = await _userManager.Users
-                .Include(u => u.Horarios) // Incluir los horarios asociados a los usuarios
+            // Obtener todos los usuarios con sus horarios
+            var todosLosUsuarios = await _userManager.Users
+                .Include(u => u.Horarios)
                 .ToListAsync();
 
-            // Cargar los roles de cada usuario
-            foreach (var user in Usuarios)
+            Usuarios = new List<ApplicationUser>();
+
+            foreach (var user in todosLosUsuarios)
             {
                 var roles = await _userManager.GetRolesAsync(user);
-                RolesPorUsuario[user.Id] = roles.ToList();
+
+                // Ignorar usuarios que tengan el rol "Paciente"
+                if (!roles.Contains("Paciente"))
+                {
+                    Usuarios.Add(user);
+                    RolesPorUsuario[user.Id] = roles.ToList();
+                }
             }
         }
+
 
     }
 }
